@@ -1,0 +1,6 @@
+1 milk;2 tomato;3 carrot;
+2 milk;
+3 carrot;
+1 bread;
+1 bread;2 milk;1 tea;
+exit
