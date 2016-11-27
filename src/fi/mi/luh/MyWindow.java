@@ -4,10 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * Created by Mikko Luhtsaari on 18-Nov-16.
@@ -79,7 +76,30 @@ public class MyWindow extends JFrame {
         open.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Open");
+
+                JFileChooser fc = new JFileChooser("Open file");
+                fc.setCurrentDirectory(new File("C://Users//M1k1tus//Dropbox//KouluhommatSyksy2016//OO//project"));
+                fc.showOpenDialog(open);
+                File file = fc.getSelectedFile();
+                String path = file.getAbsolutePath();
+                shoppingList.clear();
+
+                try(BufferedReader in = new BufferedReader(new FileReader(path))){
+                    StringBuilder sb = new StringBuilder();
+                    String line = in.readLine();
+
+                    while (line != null) {
+                        insertItemsFromLine(line);
+                        sb.append(line);
+                        sb.append(System.lineSeparator());
+                        line = in.readLine();
+                    }
+                    String everything = sb.toString();
+                    System.out.println(everything);
+                    updateTextField();
+                }catch(IOException ex){
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -143,15 +163,22 @@ public class MyWindow extends JFrame {
     }
 
     private void printShoppingListContent(){
-        if(shoppingList.size()>0) {
+        /*if(shoppingList.size()>0) {
             System.out.println("Your Shopping List now:");
             for (int i = shoppingList.size()-1; i >= 0; i--) {
+                System.out.println(shoppingList.get(i).toString());
+            }
+        }*/
+
+        if(shoppingList.size()>0) {
+            System.out.println("Your Shopping List now:");
+            for (int i = 0; i > shoppingList.size(); i++) {
                 System.out.println(shoppingList.get(i).toString());
             }
         }
     }
 
-    private void updateTextField(){
+    private void updateTextField() {
         String temp = startForShoppingList;
 
         if(!shoppingList.isEmpty()){
@@ -162,22 +189,69 @@ public class MyWindow extends JFrame {
         items.setText(temp);
     }
 
-    private void tryToSave(){
-        /*String[] temp = new String[shoppingList.size()];
-        for (int i = 0; i < shoppingList.size(); i++) {
-            temp[i] = shoppingList.get(i).toString();
-        }*/
+    private void tryToSave() {
         String saveLocation = JOptionPane.showInputDialog("Please enter" +
                 " filename");
         try{
             PrintWriter out = new PrintWriter(saveLocation+".txt");
             for (int i = 0; i < shoppingList.size(); i++) {
                 System.out.println("Tallennetaan");
-                out.println(shoppingList.get(i).toString());
+                ListItem temp = (ListItem)shoppingList.get(i);
+                out.println(temp.description());
             }
             out.close();
         }catch(IOException exp){
             exp.printStackTrace();
+        }
+    }
+
+    /**
+     * Creates ListItems from input and adds them to shoppingList.
+     *
+     * @param line modified user input.
+     */
+    private void insertItemsFromLine(String line) {
+        line = line.trim();
+        int amount = 0;
+
+        // Creating integer from String requires extra attention.
+        try {
+            String temp = "" + line.charAt(0);
+            amount = Integer.parseInt(temp);
+        } catch (NumberFormatException exp) {
+            System.out.println("!!!ERROR!!!");
+            System.out.println("Enter item as <amount> <item>");
+            System.out.println("Example input shown below");
+            System.out.println("1 milk;");
+            System.out.println("or multiple items in one line");
+            System.out.println("1 milk; 2 apple; 3 beers");
+        }
+
+        // If input was proper create item.
+        if (amount > 0) {
+            ListItem temp;
+            boolean found = false;
+            String name = line.substring(2);
+
+            // If list is empty create new ListItem.
+            if (shoppingList.size() == 0) {
+                shoppingList.add(new ListItem(name, amount));
+            } else {
+                for (int i = 0; i < shoppingList.size(); i++) {
+                    temp = (ListItem) shoppingList.get(i);
+
+                    // If item with the same name is found change its amount.
+                    if (temp.getName().equalsIgnoreCase(name)) {
+                        temp.setAmount(temp.getAmount() + amount);
+                        found = true;
+                    }
+                }
+
+                // If not matching items were found, create new ListItem.
+                if (!found) {
+                    shoppingList.add(new ListItem(name, amount));
+                }
+            }
         }
     }
 }
