@@ -31,6 +31,10 @@ public class ListItem {
         setAmount(amount);
     }
 
+    public String description(){
+        return amount + " " + name;
+    }
+
     // Getters and setters.
 
     /**
