@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
 /**
  * Created by Mikko Luhtsaari on 18-Nov-16.
@@ -19,16 +23,19 @@ public class MyWindow extends JFrame {
     private JButton combine;
     private JButton dropbox;
 
+    private TextArea items;
+
     private JPanel buttonContainer;
     private JPanel listContainer;
 
     private MyLinkedList <ListItem> shoppingList;
-    private MyLinkedList <JButton> itemButtons;
+
+    private final String startForShoppingList = "Your shopping list " +
+            "now contains: \n";
 
 
     public MyWindow(){
         shoppingList = new MyLinkedList<>();
-        itemButtons = new MyLinkedList<>();
 
         setSize(600,800);
         setLayout(new BorderLayout());
@@ -54,9 +61,7 @@ public class MyWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String itemName = JOptionPane.showInputDialog("Please enter name of the Item");
-                //System.out.println(itemName);
                 int itemAmount = Integer.parseInt(JOptionPane.showInputDialog("Please enter the amount of item(s)"));
-                //System.out.println(itemAmount);
                 insertItem(itemName, itemAmount);
                 printShoppingListContent();
             }
@@ -66,7 +71,8 @@ public class MyWindow extends JFrame {
         newList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("New List");
+                shoppingList.clear();
+                items.setText(startForShoppingList);
             }
         });
         open = new JButton("Open");
@@ -81,7 +87,7 @@ public class MyWindow extends JFrame {
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Save");
+                tryToSave();
             }
         });
 
@@ -97,7 +103,12 @@ public class MyWindow extends JFrame {
         buttonContainer.add(dropbox);
 
         listContainer = new JPanel();
-        listContainer.setLayout(new GridLayout(0,1));
+        items = new TextArea(startForShoppingList);
+        items.setEditable(false);
+        listContainer.add(items);
+
+        //listContainer = new JPanel();
+        //listContainer.setLayout(new GridLayout(0,1));
         //listContainer.add(new JButton("1 milk"));
         //listContainer.add(new JButton("2 carrot"));
     }
@@ -127,6 +138,7 @@ public class MyWindow extends JFrame {
                     shoppingList.add(new ListItem(name, amount));
                 }
             }
+            updateTextField();
         }
     }
 
@@ -136,6 +148,36 @@ public class MyWindow extends JFrame {
             for (int i = shoppingList.size()-1; i >= 0; i--) {
                 System.out.println(shoppingList.get(i).toString());
             }
+        }
+    }
+
+    private void updateTextField(){
+        String temp = startForShoppingList;
+
+        if(!shoppingList.isEmpty()){
+            for (int i = 0; i < shoppingList.size(); i++) {
+                temp += shoppingList.get(i).toString()+"\n";
+            }
+        }
+        items.setText(temp);
+    }
+
+    private void tryToSave(){
+        /*String[] temp = new String[shoppingList.size()];
+        for (int i = 0; i < shoppingList.size(); i++) {
+            temp[i] = shoppingList.get(i).toString();
+        }*/
+        String saveLocation = JOptionPane.showInputDialog("Please enter" +
+                " filename");
+        try{
+            PrintWriter out = new PrintWriter(saveLocation+".txt");
+            for (int i = 0; i < shoppingList.size(); i++) {
+                System.out.println("Tallennetaan");
+                out.println(shoppingList.get(i).toString());
+            }
+            out.close();
+        }catch(IOException exp){
+            exp.printStackTrace();
         }
     }
 }
