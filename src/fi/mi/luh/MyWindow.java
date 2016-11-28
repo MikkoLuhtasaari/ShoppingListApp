@@ -11,6 +11,8 @@ import java.io.*;
  *  @author Mikko Luhtasaari
  *  @version 1.0, 18 Nov 2016
  *  @since 1.0
+ *  Creates window to be shown.
+ *  Contains everything window related for now.
  */
 public class MyWindow extends JFrame {
     private JButton newItem;
@@ -30,10 +32,12 @@ public class MyWindow extends JFrame {
     private final String startForShoppingList = "Your shopping list " +
             "now contains: \n";
     private String path;
-    //static final String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
 
-    public MyWindow(){
+    /**
+     * Creates the window and everything relate to it.
+     */
+    public MyWindow() {
         makePath();
         shoppingList = new MyLinkedList<>();
 
@@ -41,21 +45,17 @@ public class MyWindow extends JFrame {
         setLayout(new BorderLayout());
 
         makeButtonsAndContainers();
-
         add(buttonContainer, BorderLayout.PAGE_START);
         add(listContainer, BorderLayout.CENTER);
-
-
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-
-
-
-
-    private void makeButtonsAndContainers(){
+    /**
+     * Makes buttons and containers.
+     */
+    private void makeButtonsAndContainers() {
         newItem = new JButton("New Item");
         newItem.addActionListener(new ActionListener() {
             @Override
