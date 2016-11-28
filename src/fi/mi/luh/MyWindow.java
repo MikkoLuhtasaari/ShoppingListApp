@@ -29,6 +29,7 @@ public class MyWindow extends JFrame {
 
     private final String startForShoppingList = "Your shopping list " +
             "now contains: \n";
+    //static final String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
 
     public MyWindow(){
@@ -78,7 +79,9 @@ public class MyWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 JFileChooser fc = new JFileChooser("Open file");
-                fc.setCurrentDirectory(new File("C://Users//M1k1tus//Dropbox//KouluhommatSyksy2016//OO//project"));
+                System.out.println(Main.path);
+                fc.setCurrentDirectory(new File(Main.path));
+                //fc.setCurrentDirectory(new File("C://Users//M1k1tus//Dropbox//KouluhommatSyksy2016//OO//project"));
                 fc.showOpenDialog(open);
                 File file = fc.getSelectedFile();
                 String path = file.getAbsolutePath();
@@ -193,7 +196,7 @@ public class MyWindow extends JFrame {
         String saveLocation = JOptionPane.showInputDialog("Please enter" +
                 " filename");
         try{
-            PrintWriter out = new PrintWriter(saveLocation+".txt");
+            PrintWriter out = new PrintWriter(Main.path+saveLocation+".txt");
             for (int i = 0; i < shoppingList.size(); i++) {
                 System.out.println("Tallennetaan");
                 ListItem temp = (ListItem)shoppingList.get(i);
