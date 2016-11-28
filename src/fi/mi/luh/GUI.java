@@ -14,8 +14,7 @@ public class GUI {
      * Makes the window to be shown.
      *
      */
-    public GUI(){
+    public GUI() {
         window.setVisible(true);
     }
-
 }

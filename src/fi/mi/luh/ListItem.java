@@ -31,7 +31,12 @@ public class ListItem {
         setAmount(amount);
     }
 
-    public String description(){
+    /**
+     * Returns item amount + name.
+     *
+     * @return returns description
+     */
+    public String description() {
         return amount + " " + name;
     }
 
