@@ -29,10 +29,12 @@ public class MyWindow extends JFrame {
 
     private final String startForShoppingList = "Your shopping list " +
             "now contains: \n";
+    private String path;
     //static final String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
 
     public MyWindow(){
+        makePath();
         shoppingList = new MyLinkedList<>();
 
         setSize(600,800);
@@ -77,32 +79,7 @@ public class MyWindow extends JFrame {
         open.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                JFileChooser fc = new JFileChooser("Open file");
-                System.out.println(Main.path);
-                fc.setCurrentDirectory(new File(Main.path));
-                //fc.setCurrentDirectory(new File("C://Users//M1k1tus//Dropbox//KouluhommatSyksy2016//OO//project"));
-                fc.showOpenDialog(open);
-                File file = fc.getSelectedFile();
-                String path = file.getAbsolutePath();
-                shoppingList.clear();
-
-                try(BufferedReader in = new BufferedReader(new FileReader(path))){
-                    StringBuilder sb = new StringBuilder();
-                    String line = in.readLine();
-
-                    while (line != null) {
-                        insertItemsFromLine(line);
-                        sb.append(line);
-                        sb.append(System.lineSeparator());
-                        line = in.readLine();
-                    }
-                    String everything = sb.toString();
-                    System.out.println(everything);
-                    updateTextField();
-                }catch(IOException ex){
-                    ex.printStackTrace();
-                }
+                tryToLoad();
             }
         });
 
@@ -130,13 +107,41 @@ public class MyWindow extends JFrame {
         items.setEditable(false);
         listContainer.add(items);
 
-        //listContainer = new JPanel();
-        //listContainer.setLayout(new GridLayout(0,1));
-        //listContainer.add(new JButton("1 milk"));
-        //listContainer.add(new JButton("2 carrot"));
     }
 
+    public void tryToLoad(){
+        JFileChooser fc = new JFileChooser("Open file");
+        System.out.println(path);
+        fc.setCurrentDirectory(new File(path));
+        fc.showOpenDialog(open);
+        File file = fc.getSelectedFile();
+        String path = file.getAbsolutePath();
+        shoppingList.clear();
 
+        try(BufferedReader in = new BufferedReader(new FileReader(path))){
+            StringBuilder sb = new StringBuilder();
+            String line = in.readLine();
+
+            while (line != null) {
+                insertItemsFromLine(line);
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = in.readLine();
+            }
+            String everything = sb.toString();
+            System.out.println(everything);
+            updateTextField();
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Adds item from given parameters
+     *
+     * @param name Name of the item
+     * @param amount Amount of item(s).
+     */
     private void insertItem(String name, int amount){
         if (amount > 0) {
             ListItem temp;
@@ -166,21 +171,20 @@ public class MyWindow extends JFrame {
     }
 
     private void printShoppingListContent(){
-        /*if(shoppingList.size()>0) {
-            System.out.println("Your Shopping List now:");
-            for (int i = shoppingList.size()-1; i >= 0; i--) {
-                System.out.println(shoppingList.get(i).toString());
-            }
-        }*/
 
         if(shoppingList.size()>0) {
             System.out.println("Your Shopping List now:");
+
             for (int i = 0; i > shoppingList.size(); i++) {
                 System.out.println(shoppingList.get(i).toString());
             }
         }
     }
 
+    /**
+     * Updates text to be shown in text area.
+     *
+     */
     private void updateTextField() {
         String temp = startForShoppingList;
 
@@ -192,11 +196,17 @@ public class MyWindow extends JFrame {
         items.setText(temp);
     }
 
+    /**
+     * Tries to save the file.
+     * Asks the name of the file from user.
+     *
+     */
     private void tryToSave() {
         String saveLocation = JOptionPane.showInputDialog("Please enter" +
                 " filename");
         try{
-            PrintWriter out = new PrintWriter(Main.path+saveLocation+".txt");
+            PrintWriter out = new PrintWriter(path+saveLocation+".txt");
+
             for (int i = 0; i < shoppingList.size(); i++) {
                 System.out.println("Tallennetaan");
                 ListItem temp = (ListItem)shoppingList.get(i);
@@ -255,6 +265,20 @@ public class MyWindow extends JFrame {
                     shoppingList.add(new ListItem(name, amount));
                 }
             }
+        }
+    }
+
+    private void makePath(){
+        String pathTemp = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        if(pathTemp.contains("luhtasaari-mikko.jar")) {
+            System.out.println("Löytyy");
+            int index = pathTemp.indexOf("luhtasaari-mikko.jar");
+            path = pathTemp.substring(0,index);
+            System.out.println(path);
+        }
+        else{
+            System.out.println("Ei löydy");
+            path = pathTemp;
         }
     }
 }
