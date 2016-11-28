@@ -114,7 +114,7 @@ public class MyWindow extends JFrame {
     /**
      * Tries to load existing list.
      */
-    private void tryToLoad(){
+    private void tryToLoad() {
         JFileChooser fc = new JFileChooser("Open file");
         System.out.println(path);
         fc.setCurrentDirectory(new File(path));
@@ -147,7 +147,7 @@ public class MyWindow extends JFrame {
      * @param name Name of the item
      * @param amount Amount of item(s).
      */
-    private void insertItem(String name, int amount){
+    private void insertItem(String name, int amount) {
         if (amount > 0) {
             ListItem temp;
             boolean found = false;
@@ -155,22 +155,24 @@ public class MyWindow extends JFrame {
             //If list is empty create new ListItem
             if (shoppingList.size() == 0) {
                 shoppingList.add(new ListItem(name, amount));
-            }
-            //Iterate through list
-            else {
+            } else {
+
                 for (int i = 0; i < shoppingList.size(); i++) {
                     temp = (ListItem) shoppingList.get(i);
                     //If item with the same name is found change its amount
+
                     if (temp.getName().equalsIgnoreCase(name)) {
                         temp.setAmount(temp.getAmount() + amount);
                         found = true;
                     }
                 }
+
                 //If not matching items were found, create new ListItem
                 if (!found) {
                     shoppingList.add(new ListItem(name, amount));
                 }
             }
+
             updateTextField();
         }
     }
@@ -197,6 +199,7 @@ public class MyWindow extends JFrame {
         String temp = startForShoppingList;
 
         if(!shoppingList.isEmpty()){
+
             for (int i = 0; i < shoppingList.size(); i++) {
                 temp += shoppingList.get(i).toString()+"\n";
             }
@@ -287,7 +290,7 @@ public class MyWindow extends JFrame {
             int index = pathTemp.indexOf("luhtasaari-mikko.jar");
             path = pathTemp.substring(0,index);
             System.out.println(path);
-        } else{
+        } else {
             System.out.println("Ei löydy");
             path = pathTemp;
         }
