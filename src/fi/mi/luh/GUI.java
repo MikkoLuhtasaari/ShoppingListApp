@@ -5,7 +5,6 @@ package fi.mi.luh;
  *  @author Mikko Luhtasaari
  *  @version 1.0, 18 Nov 2016
  *  @since 1.0
- *
  *  Starting class for creating window.
  */
 public class GUI {
