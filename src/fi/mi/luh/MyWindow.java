@@ -75,6 +75,7 @@ public class MyWindow extends JFrame {
                 items.setText(startForShoppingList);
             }
         });
+
         open = new JButton("Open");
         open.addActionListener(new ActionListener() {
             @Override
@@ -91,6 +92,7 @@ public class MyWindow extends JFrame {
             }
         });
 
+        //Currently not functioning
         combine = new JButton("Combine");
         dropbox = new JButton("Dropbox");
 
@@ -109,7 +111,10 @@ public class MyWindow extends JFrame {
 
     }
 
-    public void tryToLoad(){
+    /**
+     * Tries to load existing list.
+     */
+    private void tryToLoad(){
         JFileChooser fc = new JFileChooser("Open file");
         System.out.println(path);
         fc.setCurrentDirectory(new File(path));
@@ -170,6 +175,9 @@ public class MyWindow extends JFrame {
         }
     }
 
+    /**
+     * Prints shoppinglist into console.
+     */
     private void printShoppingListContent(){
 
         if(shoppingList.size()>0) {
@@ -268,15 +276,18 @@ public class MyWindow extends JFrame {
         }
     }
 
+    /**
+     * Modifies path variable if program is being run from .jar.
+     */
     private void makePath(){
         String pathTemp = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
         if(pathTemp.contains("luhtasaari-mikko.jar")) {
             System.out.println("Löytyy");
             int index = pathTemp.indexOf("luhtasaari-mikko.jar");
             path = pathTemp.substring(0,index);
             System.out.println(path);
-        }
-        else{
+        } else{
             System.out.println("Ei löydy");
             path = pathTemp;
         }
