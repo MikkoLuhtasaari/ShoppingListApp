@@ -1,12 +1,12 @@
 package fi.mi.luh;
 
 /**
- * Shopping list must contain items. Class ListItem simulates these items
- * containing amount and name of the item.
- *
+ * Created by M1k1tus on 14-Nov-16.
  * @author Mikko Luhtasaari
  * @version 1.0, 14 Nov 2016
  * @since 1.0
+ * Shopping list must contain items. Class ListItem simulates these items
+ * containing amount and name of the item.
  */
 public class ListItem {
 

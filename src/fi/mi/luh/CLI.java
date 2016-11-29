@@ -3,13 +3,13 @@ package fi.mi.luh;
 import java.util.Scanner;
 
 /**
- * Uses command line interface to access shopping list. Doesn't contain
- * possibility to save or load lists. List items can be given one by one
- * or as one line. User can exit the app by typing "exit".
- *
+ * Created by M1k1tus on 14-Nov-16.
  * @author Mikko Luhtasaari
  * @version 1.0, 14 Nov 2016
  * @since 1.0
+ * Uses command line interface to access shopping list. Doesn't contain
+ * possibility to save or load lists. List items can be given one by one
+ * or as one line. User can exit the app by typing "exit".
  */
 public class CLI implements Runnable {
 

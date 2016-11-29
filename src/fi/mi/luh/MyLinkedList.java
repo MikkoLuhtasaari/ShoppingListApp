@@ -1,12 +1,12 @@
 package fi.mi.luh;
 
 /**
- * Self-made linked list. Each element contains a reference
- * to next element if such element exists.
- *
+ * Created by M1k1tus on 2016-11-14.
  * @author Mikko Luhtasaari
  * @version 1.0, 14 Nov 2016
  * @since 1.0
+ * Self-made linked list. Each element contains a reference
+ * to next element if such element exists.
  */
 public class MyLinkedList <T> implements MyList {
 
