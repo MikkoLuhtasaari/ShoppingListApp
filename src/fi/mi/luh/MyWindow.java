@@ -87,7 +87,7 @@ public class MyWindow extends JFrame {
         setSize(600, 800);
         setLayout(new BorderLayout());
 
-        makeButtonsAndContainers();
+        makeButtonsAndContainers("");
         add(buttonContainer, BorderLayout.PAGE_START);
         add(listContainer, BorderLayout.CENTER);
 
@@ -98,8 +98,9 @@ public class MyWindow extends JFrame {
     /**
      * Makes buttons and containers.
      *
+     * @param nonSense for java lint
      */
-    private void makeButtonsAndContainers() {
+    private void makeButtonsAndContainers(String nonSense) {
         newItem = new JButton("New Item");
         newItem.addActionListener(new ActionListener() {
             @Override
