@@ -7,12 +7,12 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 /**
- * Created by Mikko Luhtasaari on 18-Nov-16.
+ * Creates window to be shown.
+ * Contains everything window related for now.
+ *
  * @author Mikko Luhtasaari
  * @version 1.0, 18 Nov 2016
  * @since 1.0
- * Creates window to be shown.
- * Contains everything window related for now.
  */
 public class MyWindow extends JFrame {
 

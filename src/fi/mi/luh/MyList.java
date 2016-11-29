@@ -1,11 +1,11 @@
 package fi.mi.luh;
 
 /**
- * Created by M1k1tus on 2016-11-14.
+ * MyList interface to be used in self-made linked list.
+ *
  * @author Mikko Luhtasaari
  * @version 1.0, 14 Nov 2016
  * @since 1.0
- * MyList interface to be used in self-made linked list.
  */
 public interface MyList<T>{
     /** Appends the specified element to the end of this list */
