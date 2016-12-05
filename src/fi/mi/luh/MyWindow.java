@@ -1,10 +1,19 @@
 package fi.mi.luh;
 
+//import com.dropbox.core.*;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v2.*;
+import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.users.FullAccount;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+
+import static fi.mi.luh.Main.ACCESS_TOKEN;
 
 /**
  * Creates window to be shown.
@@ -147,6 +156,12 @@ public class MyWindow extends JFrame {
             }
         });
         dropbox = new JButton("Dropbox");
+        dropbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                testConnection();
+            }
+        });
 
         buttonContainer = new JPanel();
         buttonContainer.add(newItem);
@@ -330,6 +345,25 @@ public class MyWindow extends JFrame {
         for (int i = 0; i < tempList.size(); i++) {
             ListItem temp =(ListItem)tempList.get(i);
             insertItem(temp.getName(),temp.getAmount(),shoppingList);
+        }
+    }
+
+    private void testConnection() {
+        DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+
+        // Get current account info
+        try {
+            FullAccount account = client.users().getCurrentAccount();
+            System.out.println(account.getName().getDisplayName());
+        } catch (DbxException e) {
+            e.printStackTrace();
+        }
+        try (InputStream in = new FileInputStream("test.txt")) {
+            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+                    .uploadAndFinish(in);
+        } catch(IOException | DbxException e) {
+            e.printStackTrace();
         }
     }
 }
