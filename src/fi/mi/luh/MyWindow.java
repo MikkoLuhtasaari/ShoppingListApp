@@ -348,6 +348,10 @@ public class MyWindow extends JFrame {
         }
     }
 
+    /**
+     * Creates connection to DP account.
+     *
+     */
     private void testConnection() {
         DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
