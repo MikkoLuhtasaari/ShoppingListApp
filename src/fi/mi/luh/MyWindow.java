@@ -4,6 +4,7 @@ package fi.mi.luh;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.*;
+import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.users.FullAccount;
 
 import javax.swing.*;
@@ -356,6 +357,12 @@ public class MyWindow extends JFrame {
             FullAccount account = client.users().getCurrentAccount();
             System.out.println(account.getName().getDisplayName());
         } catch (DbxException e) {
+            e.printStackTrace();
+        }
+        try (InputStream in = new FileInputStream("test.txt")) {
+            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+                    .uploadAndFinish(in);
+        } catch(IOException | DbxException e) {
             e.printStackTrace();
         }
     }
