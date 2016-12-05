@@ -109,7 +109,7 @@ public class MyWindow extends JFrame {
                         " enter name of the Item");
                 int itemAmount = Integer.parseInt(JOptionPane.showInputDialog(
                         "Please enter the amount of item(s)"));
-                insertItem(itemName, itemAmount);
+                insertItem(itemName, itemAmount, shoppingList);
                 printShoppingListContent();
             }
         });
@@ -139,8 +139,13 @@ public class MyWindow extends JFrame {
             }
         });
 
-        // Currently not functioning
         combine = new JButton("Combine");
+        combine.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                combineLists();
+            }
+        });
         dropbox = new JButton("Dropbox");
 
         buttonContainer = new JPanel();
@@ -176,7 +181,7 @@ public class MyWindow extends JFrame {
             while (line != null) {
                 //insertItemsFromLine(line);
                 String[] temp = line.split(" ");
-                insertItem(temp[1],Integer.parseInt(temp[0]));
+                insertItem(temp[1],Integer.parseInt(temp[0]),shoppingList);
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
@@ -196,18 +201,18 @@ public class MyWindow extends JFrame {
      * @param name Name of the item
      * @param amount Amount of item(s).
      */
-    private void insertItem(String name, int amount) {
+    private void insertItem(String name, int amount, MyLinkedList list) {
         if (amount > 0) {
             ListItem temp;
             boolean found = false;
 
             // If list is empty create new ListItem
-            if (shoppingList.size() == 0) {
-                shoppingList.add(new ListItem(name, amount));
+            if (list.size() == 0) {
+                list.add(new ListItem(name, amount));
             } else {
 
-                for (int i = 0; i < shoppingList.size(); i++) {
-                    temp = (ListItem) shoppingList.get(i);
+                for (int i = 0; i < list.size(); i++) {
+                    temp = (ListItem) list.get(i);
                     // If item with the same name is found change its amount
 
                     if (temp.getName().equalsIgnoreCase(name)) {
@@ -218,7 +223,7 @@ public class MyWindow extends JFrame {
 
                 // If not matching items were found, create new ListItem
                 if (!found) {
-                    shoppingList.add(new ListItem(name, amount));
+                    list.add(new ListItem(name, amount));
                 }
             }
 
@@ -292,6 +297,39 @@ public class MyWindow extends JFrame {
             System.out.println(path);
         } else {
             path = pathTemp;
+        }
+    }
+
+    /**
+     * Tries to combine two shoppinglists.
+     *
+     */
+    private void combineLists() {
+        MyLinkedList<ListItem> tempList = new MyLinkedList<>();
+        JFileChooser fc = new JFileChooser("Choose list to combine");
+        fc.setCurrentDirectory(new File(path));
+        fc.showOpenDialog(open);
+        File file = fc.getSelectedFile();
+        String path = file.getAbsolutePath();
+
+        try(BufferedReader in = new BufferedReader(new FileReader(path))) {
+            StringBuilder sb = new StringBuilder();
+            String line = in.readLine();
+
+            while (line != null) {
+                String[] temp = line.split(" ");
+                insertItem(temp[1],Integer.parseInt(temp[0]),tempList);
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = in.readLine();
+            }
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+
+        for (int i = 0; i < tempList.size(); i++) {
+            ListItem temp =(ListItem)tempList.get(i);
+            insertItem(temp.getName(),temp.getAmount(),shoppingList);
         }
     }
 }
