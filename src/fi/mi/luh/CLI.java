@@ -69,57 +69,43 @@ public class CLI implements Runnable {
         String[] temp = input.split(";");
 
         for (String temporary : temp) {
-            insertItems(temporary);
+            String[] temp2 = temporary.split(" ");
+            insertItem(temp2[1],Integer.parseInt(temp2[0]));
         }
     }
 
     /**
-     * Creates ListItems from input and adds them to shoppingList.
+     * Adds item from given parameters.
      *
-     * @param line modified user input.
+     * @param name Name of the item
+     * @param amount Amount of item(s).
      */
-    private void insertItems(String line) {
-        line = line.trim();
-        int amount = 0;
-
-        // Creating integer from String requires extra attention.
-        try {
-            String temp = "" + line.charAt(0);
-            amount = Integer.parseInt(temp);
-        } catch (NumberFormatException exp) {
-            System.out.println("!!!ERROR!!!");
-            System.out.println("Enter item as <amount> <item>");
-            System.out.println("Example input shown below");
-            System.out.println("1 milk;");
-            System.out.println("or multiple items in one line");
-            System.out.println("1 milk; 2 apple; 3 beers");
-        }
-
-        // If input was proper create item.
+    private void insertItem(String name, int amount) {
         if (amount > 0) {
             ListItem temp;
             boolean found = false;
-            String name = line.substring(2);
 
-            // If list is empty create new ListItem.
+            // If list is empty create new ListItem
             if (shoppingList.size() == 0) {
                 shoppingList.add(new ListItem(name, amount));
             } else {
+
                 for (int i = 0; i < shoppingList.size(); i++) {
                     temp = (ListItem) shoppingList.get(i);
+                    // If item with the same name is found change its amount
 
-                    // If item with the same name is found change its amount.
                     if (temp.getName().equalsIgnoreCase(name)) {
                         temp.setAmount(temp.getAmount() + amount);
                         found = true;
                     }
                 }
 
-                // If not matching items were found, create new ListItem.
+                // If not matching items were found, create new ListItem
                 if (!found) {
                     shoppingList.add(new ListItem(name, amount));
                 }
             }
+
         }
     }
 
