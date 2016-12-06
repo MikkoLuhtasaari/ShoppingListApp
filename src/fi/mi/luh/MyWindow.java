@@ -13,6 +13,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 
 import static fi.mi.luh.Main.ACCESS_TOKEN;
 
@@ -436,15 +439,15 @@ public class MyWindow extends JFrame {
 
     }*/
 
-    private void testSaving(){
-        String fileName = path+"temporary.txt";
+    private void testSaving() {
+        String fileName = path + "temporary.txt";
         System.out.println(fileName);
         try {
             PrintWriter out = new PrintWriter(fileName);
 
             for (int i = 0; i < shoppingList.size(); i++) {
                 System.out.println("Tallennetaan");
-                ListItem temp = (ListItem)shoppingList.get(i);
+                ListItem temp = (ListItem) shoppingList.get(i);
                 out.println(temp.description());
             }
 
@@ -459,8 +462,17 @@ public class MyWindow extends JFrame {
         try (InputStream in = new FileInputStream(fileName)) {
             FileMetadata metadata = client.files().uploadBuilder("/test.txt")
                     .uploadAndFinish(in);
-        } catch(IOException | DbxException e) {
+        } catch (IOException | DbxException e) {
             e.printStackTrace();
         }
+
+        // Delete temporary file.
+        File file = new File(fileName);
+        if (file.delete()) {
+            System.out.println(file.getName() + " is deleted!");
+        } else {
+            System.out.println("Delete operation is failed.");
+        }
+
     }
 }
