@@ -165,7 +165,7 @@ public class MyWindow extends JFrame {
         dropbox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                testSaving();
+                testLoading();
             }
         });
 
@@ -200,7 +200,6 @@ public class MyWindow extends JFrame {
             String line = in.readLine();
 
             while (line != null) {
-                //insertItemsFromLine(line);
                 String[] temp = line.split(" ");
                 insertItem(temp[1],Integer.parseInt(temp[0]),shoppingList);
                 sb.append(line);
@@ -448,7 +447,45 @@ public class MyWindow extends JFrame {
 
     }
 
-    private void testLoading() throws IOException{
+    private void testLoading() {
+        DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
+        String fileNameTemp = JOptionPane.showInputDialog("Please enter" +
+                " filename");
+        String fileName = fileNameTemp+".txt";
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(path + fileName);
+            try {
+                DbxEntry.File downloadedFile = client.getFile("/" + fileName, null,
+                        outputStream);
+            } finally {
+                outputStream.close();
+            }
+        } catch (IOException | DbxException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Load complete");
+
+        try (BufferedReader in = new BufferedReader(new FileReader(path + fileName))) {
+            StringBuilder sb = new StringBuilder();
+            String line = in.readLine();
+
+            while (line != null) {
+                String[] temp = line.split(" ");
+                insertItem(temp[1], Integer.parseInt(temp[0]), shoppingList);
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = in.readLine();
+            }
+
+            String everything = sb.toString();
+            System.out.println(everything);
+            updateTextField();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
     }
 }
+
