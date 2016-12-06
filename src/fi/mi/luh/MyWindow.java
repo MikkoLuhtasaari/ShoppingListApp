@@ -2,9 +2,11 @@ package fi.mi.luh;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v1.DbxClientV1;
 import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v1.DbxWriteMode;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.DeleteArg;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.users.FullAccount;
 
@@ -397,6 +399,8 @@ public class MyWindow extends JFrame {
 
         DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+
+        //TODO check if file already exists.
         try (InputStream in = new FileInputStream(saveLocation)) {
             FileMetadata metadata = client.files().uploadBuilder("/"+fileName+".txt")
                     .uploadAndFinish(in);
@@ -411,6 +415,20 @@ public class MyWindow extends JFrame {
         } else {
             System.out.println("Delete operation is failed.");
         }
+
+        // This removes test.txt file from DP but uses wrong DbxClient version.
+        /*DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
+        String fileName = "/test.txt";
+        try {
+            client.delete(fileName);
+        } catch(DbxException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+
+    private void testLoading() throws IOException{
 
     }
 }
