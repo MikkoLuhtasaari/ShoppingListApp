@@ -354,7 +354,7 @@ public class MyWindow extends JFrame {
     }
 
     /**
-     * Creates connection to DP account.
+     * Tests connection to DP account.
      *
      */
     private void testConnection() {
@@ -376,6 +376,10 @@ public class MyWindow extends JFrame {
         }
     }
 
+    /**
+     * Saves the file to Dropbox.
+     *
+     */
     private void testSaving() {
         String fileName = JOptionPane.showInputDialog("Please enter" +
                 " filename");
@@ -447,6 +451,10 @@ public class MyWindow extends JFrame {
 
     }
 
+    /**
+     * Loads the file from Dropbox.
+     *
+     */
     private void testLoading() {
         DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
         DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
@@ -484,6 +492,14 @@ public class MyWindow extends JFrame {
             updateTextField();
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+
+        // Delete temporary file.
+        File file = new File(path+fileName);
+        if (file.delete()) {
+            System.out.println(file.getName() + " is deleted!");
+        } else {
+            System.out.println("Delete operation is failed.");
         }
 
     }
