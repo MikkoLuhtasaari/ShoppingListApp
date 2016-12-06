@@ -165,7 +165,7 @@ public class MyWindow extends JFrame {
         dropbox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                testLoading();
+                setDPOperation();
             }
         });
 
@@ -354,33 +354,10 @@ public class MyWindow extends JFrame {
     }
 
     /**
-     * Tests connection to DP account.
-     *
-     */
-    private void testConnection() {
-        DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
-
-        // Get current account info
-        try {
-            FullAccount account = client.users().getCurrentAccount();
-            System.out.println(account.getName().getDisplayName());
-        } catch (DbxException e) {
-            e.printStackTrace();
-        }
-        try (InputStream in = new FileInputStream("test.txt")) {
-            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
-                    .uploadAndFinish(in);
-        } catch(IOException | DbxException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Saves the file to Dropbox.
      *
      */
-    private void testSaving() {
+    private void dropboxSaving() {
         String fileName = JOptionPane.showInputDialog("Please enter" +
                 " filename");
         String saveLocation = path + fileName+ ".txt";
@@ -455,7 +432,7 @@ public class MyWindow extends JFrame {
      * Loads the file from Dropbox.
      *
      */
-    private void testLoading() {
+    private void dropboxLoading() {
         DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
         DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
         String fileNameTemp = JOptionPane.showInputDialog("Please enter" +
@@ -503,5 +480,31 @@ public class MyWindow extends JFrame {
         }
 
     }
+
+    private void setDPOperation(){
+        Object[] options = {"Save",
+                "Load"};
+        int n = JOptionPane.showOptionDialog(this,
+                "Please select operation",
+                "Files from Dropbox",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if(n == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Clicked cancel.",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+        if(n == 0) {
+            dropboxSaving();
+        }
+        if(n == 1) {
+            dropboxLoading();
+        }
+    }
+
 }
 
