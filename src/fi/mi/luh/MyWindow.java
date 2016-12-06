@@ -4,20 +4,14 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v1.DbxClientV1;
 import com.dropbox.core.v1.DbxEntry;
-import com.dropbox.core.v1.DbxWriteMode;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.DeleteArg;
 import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.users.FullAccount;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 
 import static fi.mi.luh.Main.ACCESS_TOKEN;
 
@@ -201,7 +195,7 @@ public class MyWindow extends JFrame {
 
             while (line != null) {
                 String[] temp = line.split(" ");
-                insertItem(temp[1],Integer.parseInt(temp[0]),shoppingList);
+                insertItem(temp[1], Integer.parseInt(temp[0]), shoppingList);
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
@@ -218,8 +212,9 @@ public class MyWindow extends JFrame {
     /**
      * Adds item from given parameters.
      *
-     * @param name Name of the item
+     * @param name Name of the item.
      * @param amount Amount of item(s).
+     * @param list MyLinkedList where items are added.
      */
     private void insertItem(String name, int amount, MyLinkedList list) {
         if (amount > 0) {
@@ -233,8 +228,8 @@ public class MyWindow extends JFrame {
 
                 for (int i = 0; i < list.size(); i++) {
                     temp = (ListItem) list.get(i);
-                    // If item with the same name is found change its amount
 
+                    // If item with the same name is found change its amount
                     if (temp.getName().equalsIgnoreCase(name)) {
                         temp.setAmount(temp.getAmount() + amount);
                         found = true;
@@ -338,7 +333,7 @@ public class MyWindow extends JFrame {
 
             while (line != null) {
                 String[] temp = line.split(" ");
-                insertItem(temp[1],Integer.parseInt(temp[0]),tempList);
+                insertItem(temp[1], Integer.parseInt(temp[0]), tempList);
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
@@ -375,22 +370,22 @@ public class MyWindow extends JFrame {
             }
 
             out.close();
-
         } catch (IOException | SecurityException e) {
             e.printStackTrace();
         }
 
         // Init connection to DP.
-        DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxRequestConfig config = new DbxRequestConfig
+                ("dropbox/ShoppingList-Mikko-Luhtasaari");
         DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
-
 
         // Check DP, if file with a same name is found, delete it.
         try {
             DbxEntry.WithChildren listing = client.getMetadataWithChildren("/");
+
             for (DbxEntry child : listing.children) {
 
-                if(child.name.equalsIgnoreCase(fileName+".txt")) {
+                if (child.name.equalsIgnoreCase(fileName+".txt")) {
                     exists = true;
                     System.out.println("found");
                 }
@@ -400,7 +395,7 @@ public class MyWindow extends JFrame {
         }
 
         // Delete the file.
-        if(exists) {
+        if (exists) {
             try {
                 client.delete("/"+fileName+".txt");
                 System.out.println("deleted from DP!");
@@ -411,8 +406,10 @@ public class MyWindow extends JFrame {
 
         // Create another connection to save the file.
         DbxClientV2 client2 = new DbxClientV2(config, ACCESS_TOKEN);
+
         try (InputStream in = new FileInputStream(saveLocation)) {
-            FileMetadata metadata = client2.files().uploadBuilder("/"+fileName+".txt")
+            FileMetadata metadata = client2.files().
+                    uploadBuilder("/"+fileName+".txt")
                     .uploadAndFinish(in);
         } catch (IOException | DbxException e) {
             e.printStackTrace();
@@ -420,12 +417,12 @@ public class MyWindow extends JFrame {
 
         // Delete temporary file.
         File file = new File(saveLocation);
+
         if (file.delete()) {
             System.out.println(file.getName() + " is deleted!");
         } else {
             System.out.println("Delete operation is failed.");
         }
-
     }
 
     /**
@@ -433,16 +430,19 @@ public class MyWindow extends JFrame {
      *
      */
     private void dropboxLoading() {
-        DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxRequestConfig config = new DbxRequestConfig
+                ("dropbox/ShoppingList-Mikko-Luhtasaari");
         DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
         String fileNameTemp = JOptionPane.showInputDialog("Please enter" +
                 " filename");
         String fileName = fileNameTemp+".txt";
 
         try {
-            FileOutputStream outputStream = new FileOutputStream(path + fileName);
+            FileOutputStream outputStream = new FileOutputStream
+                    (path + fileName);
             try {
-                DbxEntry.File downloadedFile = client.getFile("/" + fileName, null,
+                DbxEntry.File downloadedFile =
+                        client.getFile("/" + fileName, null,
                         outputStream);
             } finally {
                 outputStream.close();
@@ -450,9 +450,9 @@ public class MyWindow extends JFrame {
         } catch (IOException | DbxException e) {
             e.printStackTrace();
         }
-        System.out.println("Load complete");
 
-        try (BufferedReader in = new BufferedReader(new FileReader(path + fileName))) {
+        try (BufferedReader in =
+                     new BufferedReader(new FileReader(path + fileName))) {
             StringBuilder sb = new StringBuilder();
             String line = in.readLine();
 
@@ -473,15 +473,19 @@ public class MyWindow extends JFrame {
 
         // Delete temporary file.
         File file = new File(path+fileName);
+
         if (file.delete()) {
             System.out.println(file.getName() + " is deleted!");
         } else {
             System.out.println("Delete operation is failed.");
         }
-
     }
 
-    private void setDPOperation(){
+    /**
+     * Creates options for loading and saving via DP.
+     *
+     */
+    private void setDPOperation() {
         Object[] options = {"Save",
                 "Load"};
         int n = JOptionPane.showOptionDialog(this,
@@ -492,19 +496,20 @@ public class MyWindow extends JFrame {
                 null,
                 options,
                 options[0]);
-        if(n == -1) {
+
+        if (n == -1) {
             JOptionPane.showMessageDialog(this,
                     "Clicked cancel.",
                     "Warning",
                     JOptionPane.WARNING_MESSAGE);
         }
-        if(n == 0) {
+
+        if (n == 0) {
             dropboxSaving();
         }
-        if(n == 1) {
+
+        if (n == 1) {
             dropboxLoading();
         }
     }
-
 }
-
