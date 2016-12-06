@@ -20,7 +20,7 @@ import static fi.mi.luh.Main.ACCESS_TOKEN;
  * Contains everything window related for now.
  *
  * @author Mikko Luhtasaari
- * @version 1.0, 18 Nov 2016
+ * @version 2.0, 06 Dec 2016
  * @since 1.0
  */
 public class MyWindow extends JFrame {
