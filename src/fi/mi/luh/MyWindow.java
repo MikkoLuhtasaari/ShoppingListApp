@@ -1,9 +1,8 @@
 package fi.mi.luh;
 
-//import com.dropbox.core.*;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.v2.*;
+import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.users.FullAccount;
 
@@ -159,7 +158,7 @@ public class MyWindow extends JFrame {
         dropbox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                testConnection();
+                testSaving();
             }
         });
 
@@ -369,5 +368,46 @@ public class MyWindow extends JFrame {
         } catch(IOException | DbxException e) {
             e.printStackTrace();
         }
+    }
+
+    private void testSaving(){
+        String fileName = path+"temporary.txt";
+        System.out.println(fileName);
+        File newFile = new File(fileName);
+
+        System.out.println(newFile.exists());
+        if(newFile.exists()){
+            try {
+                System.out.println(newFile.delete());
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                newFile.createNewFile();
+                PrintWriter out = new PrintWriter(fileName);
+
+                for (int i = 0; i < shoppingList.size(); i++) {
+                    System.out.println("Tallennetaan");
+                    ListItem temp = (ListItem)shoppingList.get(i);
+                    out.println(temp.description());
+                }
+
+                out.close();
+
+            } catch (IOException | SecurityException e) {
+                e.printStackTrace();
+            }
+
+            DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
+            DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+            try (InputStream in = new FileInputStream(fileName)) {
+                FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+                        .uploadAndFinish(in);
+            } catch(IOException | DbxException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
