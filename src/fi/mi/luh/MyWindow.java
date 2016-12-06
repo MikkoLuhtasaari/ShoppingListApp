@@ -375,75 +375,13 @@ public class MyWindow extends JFrame {
         }
     }
 
-
-    /*public void testSaving() throws DbxException, IOException {
-        String saveLocation = path + "temporary.txt";
-            PrintWriter out = new PrintWriter(saveLocation);
-
-            for (int i = 0; i < shoppingList.size(); i++) {
-                System.out.println("Tallennetaan");
-                ListItem temp = (ListItem)shoppingList.get(i);
-                out.println(temp.description());
-            }
-            out.close();
-
-        File inputFile = new File(saveLocation);
-        FileInputStream fis = new FileInputStream(inputFile);
-        try {
-            DbxEntry.File uploadedFile = dbxClient.uploadFile("/" + saveLocation,
-                    DbxWriteMode.add(), inputFile.length(), fis);
-            String sharedUrl = dbxClient.createShareableUrl("/" + saveLocation);
-            System.out.println("Uploaded: " + uploadedFile.toString() + " URL "
-                    + sharedUrl);
-        } finally {
-            fis.close();
-        }
-    }*private void testSaving(){
-        String fileName = path+"temporary.txt";
-        System.out.println(fileName);
-        File newFile = new File(fileName);
-
-        System.out.println(newFile.exists());
-        if(newFile.exists()){
-            try {
-                System.out.println(newFile.delete());
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                newFile.createNewFile();
-                PrintWriter out = new PrintWriter(fileName);
-
-                for (int i = 0; i < shoppingList.size(); i++) {
-                    System.out.println("Tallennetaan");
-                    ListItem temp = (ListItem)shoppingList.get(i);
-                    out.println(temp.description());
-                }
-
-                out.close();
-
-            } catch (IOException | SecurityException e) {
-                e.printStackTrace();
-            }
-
-            DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
-            DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
-            try (InputStream in = new FileInputStream(fileName)) {
-                FileMetadata metadata = client.files().uploadBuilder("/test.txt")
-                        .uploadAndFinish(in);
-            } catch(IOException | DbxException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }*/
-
     private void testSaving() {
-        String fileName = path + "temporary.txt";
-        System.out.println(fileName);
+        String fileName = JOptionPane.showInputDialog("Please enter" +
+                " filename");
+        String saveLocation = path + fileName+ ".txt";
+        System.out.println(saveLocation);
         try {
-            PrintWriter out = new PrintWriter(fileName);
+            PrintWriter out = new PrintWriter(saveLocation);
 
             for (int i = 0; i < shoppingList.size(); i++) {
                 System.out.println("Tallennetaan");
@@ -459,15 +397,15 @@ public class MyWindow extends JFrame {
 
         DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
         DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
-        try (InputStream in = new FileInputStream(fileName)) {
-            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+        try (InputStream in = new FileInputStream(saveLocation)) {
+            FileMetadata metadata = client.files().uploadBuilder("/"+fileName+".txt")
                     .uploadAndFinish(in);
         } catch (IOException | DbxException e) {
             e.printStackTrace();
         }
 
         // Delete temporary file.
-        File file = new File(fileName);
+        File file = new File(saveLocation);
         if (file.delete()) {
             System.out.println(file.getName() + " is deleted!");
         } else {
