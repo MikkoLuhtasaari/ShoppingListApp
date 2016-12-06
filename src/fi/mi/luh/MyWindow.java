@@ -1,11 +1,11 @@
 package fi.mi.luh;
 
-//import com.dropbox.core.*;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.v2.*;
+import com.dropbox.core.v1.DbxClientV1;
+import com.dropbox.core.v1.DbxEntry;
+import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.users.FullAccount;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,7 @@ import static fi.mi.luh.Main.ACCESS_TOKEN;
  * Contains everything window related for now.
  *
  * @author Mikko Luhtasaari
- * @version 1.0, 18 Nov 2016
+ * @version 2.0, 06 Dec 2016
  * @since 1.0
  */
 public class MyWindow extends JFrame {
@@ -159,7 +159,7 @@ public class MyWindow extends JFrame {
         dropbox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                testConnection();
+                setDPOperation();
             }
         });
 
@@ -194,9 +194,8 @@ public class MyWindow extends JFrame {
             String line = in.readLine();
 
             while (line != null) {
-                //insertItemsFromLine(line);
                 String[] temp = line.split(" ");
-                insertItem(temp[1],Integer.parseInt(temp[0]),shoppingList);
+                insertItem(temp[1], Integer.parseInt(temp[0]), shoppingList);
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
@@ -213,8 +212,9 @@ public class MyWindow extends JFrame {
     /**
      * Adds item from given parameters.
      *
-     * @param name Name of the item
+     * @param name Name of the item.
      * @param amount Amount of item(s).
+     * @param list MyLinkedList where items are added.
      */
     private void insertItem(String name, int amount, MyLinkedList list) {
         if (amount > 0) {
@@ -228,8 +228,8 @@ public class MyWindow extends JFrame {
 
                 for (int i = 0; i < list.size(); i++) {
                     temp = (ListItem) list.get(i);
-                    // If item with the same name is found change its amount
 
+                    // If item with the same name is found change its amount
                     if (temp.getName().equalsIgnoreCase(name)) {
                         temp.setAmount(temp.getAmount() + amount);
                         found = true;
@@ -333,7 +333,7 @@ public class MyWindow extends JFrame {
 
             while (line != null) {
                 String[] temp = line.split(" ");
-                insertItem(temp[1],Integer.parseInt(temp[0]),tempList);
+                insertItem(temp[1], Integer.parseInt(temp[0]), tempList);
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
@@ -348,22 +348,168 @@ public class MyWindow extends JFrame {
         }
     }
 
-    private void testConnection() {
-        DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+    /**
+     * Saves the file to Dropbox.
+     *
+     */
+    private void dropboxSaving() {
+        String fileName = JOptionPane.showInputDialog("Please enter" +
+                " filename");
+        String saveLocation = path + fileName+ ".txt";
+        System.out.println(saveLocation);
+        boolean exists = false;
 
-        // Get current account info
+        // Create temporary text file which is then uploaded to DP.
         try {
-            FullAccount account = client.users().getCurrentAccount();
-            System.out.println(account.getName().getDisplayName());
+            PrintWriter out = new PrintWriter(saveLocation);
+
+            for (int i = 0; i < shoppingList.size(); i++) {
+                System.out.println("Tallennetaan");
+                ListItem temp = (ListItem) shoppingList.get(i);
+                out.println(temp.description());
+            }
+
+            out.close();
+        } catch (IOException | SecurityException e) {
+            e.printStackTrace();
+        }
+
+        // Init connection to DP.
+        DbxRequestConfig config = new DbxRequestConfig
+                ("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
+
+        // Check DP, if file with a same name is found, delete it.
+        try {
+            DbxEntry.WithChildren listing = client.getMetadataWithChildren("/");
+
+            for (DbxEntry child : listing.children) {
+
+                if (child.name.equalsIgnoreCase(fileName+".txt")) {
+                    exists = true;
+                    System.out.println("found");
+                }
+            }
         } catch (DbxException e) {
             e.printStackTrace();
         }
-        try (InputStream in = new FileInputStream("test.txt")) {
-            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+
+        // Delete the file.
+        if (exists) {
+            try {
+                client.delete("/"+fileName+".txt");
+                System.out.println("deleted from DP!");
+            } catch(DbxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Create another connection to save the file.
+        DbxClientV2 client2 = new DbxClientV2(config, ACCESS_TOKEN);
+
+        try (InputStream in = new FileInputStream(saveLocation)) {
+            FileMetadata metadata = client2.files().
+                    uploadBuilder("/"+fileName+".txt")
                     .uploadAndFinish(in);
-        } catch(IOException | DbxException e) {
+        } catch (IOException | DbxException e) {
             e.printStackTrace();
+        }
+
+        // Delete temporary file.
+        File file = new File(saveLocation);
+
+        if (file.delete()) {
+            System.out.println(file.getName() + " is deleted!");
+        } else {
+            System.out.println("Delete operation is failed.");
+        }
+    }
+
+    /**
+     * Loads the file from Dropbox.
+     *
+     */
+    private void dropboxLoading() {
+        DbxRequestConfig config = new DbxRequestConfig
+                ("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
+        String fileNameTemp = JOptionPane.showInputDialog("Please enter" +
+                " filename");
+        String fileName = fileNameTemp+".txt";
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream
+                    (path + fileName);
+            try {
+                DbxEntry.File downloadedFile =
+                        client.getFile("/" + fileName, null,
+                        outputStream);
+            } finally {
+                outputStream.close();
+            }
+        } catch (IOException | DbxException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader in =
+                     new BufferedReader(new FileReader(path + fileName))) {
+            StringBuilder sb = new StringBuilder();
+            String line = in.readLine();
+
+            while (line != null) {
+                String[] temp = line.split(" ");
+                insertItem(temp[1], Integer.parseInt(temp[0]), shoppingList);
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = in.readLine();
+            }
+
+            String everything = sb.toString();
+            System.out.println(everything);
+            updateTextField();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        // Delete temporary file.
+        File file = new File(path+fileName);
+
+        if (file.delete()) {
+            System.out.println(file.getName() + " is deleted!");
+        } else {
+            System.out.println("Delete operation is failed.");
+        }
+    }
+
+    /**
+     * Creates options for loading and saving via DP.
+     *
+     */
+    private void setDPOperation() {
+        Object[] options = {"Save",
+                "Load"};
+        int n = JOptionPane.showOptionDialog(this,
+                "Please select operation",
+                "Files from Dropbox",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        if (n == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Clicked cancel.",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
+        if (n == 0) {
+            dropboxSaving();
+        }
+
+        if (n == 1) {
+            dropboxLoading();
         }
     }
 }

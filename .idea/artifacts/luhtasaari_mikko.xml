@@ -6,6 +6,9 @@
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="project" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../dropbox-core-sdk-2.1.2/dropbox-core-sdk-2.1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../dropbox-core-sdk-2.1.2/dropbox-core-sdk-2.1.2-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../dropbox-core-sdk-2.1.2/lib/jackson-core-2.7.4.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
