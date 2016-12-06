@@ -2,6 +2,8 @@ package fi.mi.luh;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v1.DbxEntry;
+import com.dropbox.core.v1.DbxWriteMode;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.users.FullAccount;
@@ -370,7 +372,30 @@ public class MyWindow extends JFrame {
         }
     }
 
-    private void testSaving(){
+
+    /*public void testSaving() throws DbxException, IOException {
+        String saveLocation = path + "temporary.txt";
+            PrintWriter out = new PrintWriter(saveLocation);
+
+            for (int i = 0; i < shoppingList.size(); i++) {
+                System.out.println("Tallennetaan");
+                ListItem temp = (ListItem)shoppingList.get(i);
+                out.println(temp.description());
+            }
+            out.close();
+
+        File inputFile = new File(saveLocation);
+        FileInputStream fis = new FileInputStream(inputFile);
+        try {
+            DbxEntry.File uploadedFile = dbxClient.uploadFile("/" + saveLocation,
+                    DbxWriteMode.add(), inputFile.length(), fis);
+            String sharedUrl = dbxClient.createShareableUrl("/" + saveLocation);
+            System.out.println("Uploaded: " + uploadedFile.toString() + " URL "
+                    + sharedUrl);
+        } finally {
+            fis.close();
+        }
+    }*private void testSaving(){
         String fileName = path+"temporary.txt";
         System.out.println(fileName);
         File newFile = new File(fileName);
@@ -409,5 +434,33 @@ public class MyWindow extends JFrame {
             }
         }
 
+    }*/
+
+    private void testSaving(){
+        String fileName = path+"temporary.txt";
+        System.out.println(fileName);
+        try {
+            PrintWriter out = new PrintWriter(fileName);
+
+            for (int i = 0; i < shoppingList.size(); i++) {
+                System.out.println("Tallennetaan");
+                ListItem temp = (ListItem)shoppingList.get(i);
+                out.println(temp.description());
+            }
+
+            out.close();
+
+        } catch (IOException | SecurityException e) {
+            e.printStackTrace();
+        }
+
+        DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
+        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+        try (InputStream in = new FileInputStream(fileName)) {
+            FileMetadata metadata = client.files().uploadBuilder("/test.txt")
+                    .uploadAndFinish(in);
+        } catch(IOException | DbxException e) {
+            e.printStackTrace();
+        }
     }
 }
