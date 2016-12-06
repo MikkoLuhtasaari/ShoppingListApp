@@ -382,6 +382,9 @@ public class MyWindow extends JFrame {
                 " filename");
         String saveLocation = path + fileName+ ".txt";
         System.out.println(saveLocation);
+        boolean exists = false;
+
+        // Create temporary text file which is then uploaded to DP.
         try {
             PrintWriter out = new PrintWriter(saveLocation);
 
@@ -397,12 +400,39 @@ public class MyWindow extends JFrame {
             e.printStackTrace();
         }
 
+        // Init connection to DP.
         DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
-        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
 
-        //TODO check if file already exists.
+
+        // Check DP, if file with a same name is found, delete it.
+        try {
+            DbxEntry.WithChildren listing = client.getMetadataWithChildren("/");
+            for (DbxEntry child : listing.children) {
+
+                if(child.name.equalsIgnoreCase(fileName+".txt")) {
+                    exists = true;
+                    System.out.println("found");
+                }
+            }
+        } catch (DbxException e) {
+            e.printStackTrace();
+        }
+
+        // Delete the file.
+        if(exists) {
+            try {
+                client.delete("/"+fileName+".txt");
+                System.out.println("deleted from DP!");
+            } catch(DbxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Create another connection to save the file.
+        DbxClientV2 client2 = new DbxClientV2(config, ACCESS_TOKEN);
         try (InputStream in = new FileInputStream(saveLocation)) {
-            FileMetadata metadata = client.files().uploadBuilder("/"+fileName+".txt")
+            FileMetadata metadata = client2.files().uploadBuilder("/"+fileName+".txt")
                     .uploadAndFinish(in);
         } catch (IOException | DbxException e) {
             e.printStackTrace();
@@ -416,17 +446,7 @@ public class MyWindow extends JFrame {
             System.out.println("Delete operation is failed.");
         }
 
-        // This removes test.txt file from DP but uses wrong DbxClient version.
-        /*DbxRequestConfig config = new DbxRequestConfig("dropbox/ShoppingList-Mikko-Luhtasaari");
-        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
-        String fileName = "/test.txt";
-        try {
-            client.delete(fileName);
-        } catch(DbxException e) {
-            e.printStackTrace();
-        }*/
     }
-
 
     private void testLoading() throws IOException{
 
