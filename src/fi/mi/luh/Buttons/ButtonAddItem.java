@@ -15,9 +15,22 @@ import javax.swing.*;
  * @since 2.0
  */
 public class ButtonAddItem extends JButton {
+    /**
+     * Stores Main view.
+     */
     private MyWindow window;
+
+    /**
+     * Stores buttons name.
+     */
     private String name;
 
+    /**
+     * Constructs button and adds action listener.
+     *
+     * @param window main view.
+     * @param name name of the button.
+     */
     public ButtonAddItem(MyWindow window, String name){
         super(name);
         this.window = window;
@@ -26,6 +39,10 @@ public class ButtonAddItem extends JButton {
         addMyActionListener();
     }
 
+    /**
+     * Adds corresponding action listener.
+     * Adds items to shopping list.
+     */
     private void addMyActionListener() {
         this.addActionListener(e -> {
             String itemName = JOptionPane.showInputDialog("Please " +
@@ -90,6 +107,11 @@ public class ButtonAddItem extends JButton {
         window.getItems().setText(temp);
     }
 
+    /**
+     * Returns buttons name.
+     *
+     * @return return name.
+     */
     public String getName(){
         return name;
     }
