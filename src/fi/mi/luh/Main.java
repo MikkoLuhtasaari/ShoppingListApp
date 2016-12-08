@@ -11,6 +11,12 @@ public class Main {
     public static final String ACCESS_TOKEN = "saewg_CgqBIAAAAAAAAJT_lsI3wwCZO1Ogz-w87rUzeyh_5lyHanN5x0nYEA5dBK";
 
     /**
+     * Sets starting text to be shown.
+     */
+    public static final String startForShoppingList = "Your shopping list " +
+            "now contains: \n";
+
+    /**
      * Starts the app.
      *
      * @param args command line parameter

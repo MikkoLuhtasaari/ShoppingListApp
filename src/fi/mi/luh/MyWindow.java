@@ -1,19 +1,11 @@
 package fi.mi.luh;
 
-import com.dropbox.core.DbxException;
-import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.v1.DbxClientV1;
-import com.dropbox.core.v1.DbxEntry;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
+import fi.mi.luh.Buttons.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.*;
 
-import static fi.mi.luh.Main.ACCESS_TOKEN;
+import java.awt.*;
+
 
 /**
  * Creates window to be shown.
@@ -24,36 +16,6 @@ import static fi.mi.luh.Main.ACCESS_TOKEN;
  * @since 1.0
  */
 public class MyWindow extends JFrame {
-
-    /**
-     * Adds new items.
-     */
-    private JButton newItem;
-
-    /**
-     * Clears the list.
-     */
-    private JButton newList;
-
-    /**
-     * Opens another list.
-     */
-    private JButton open;
-
-    /**
-     * Saves the list.
-     */
-    private JButton save;
-
-    /**
-     * Combines two lists. Currently not in use. Does nothing in version 1.0.
-     */
-    private JButton combine;
-
-    /**
-     * Saves and loads from DP. Does nothing in version 1.0.
-     */
-    private JButton dropbox;
 
     /**
      * Shows this shoppinglist.
@@ -74,12 +36,6 @@ public class MyWindow extends JFrame {
      * Contains items.
      */
     private MyLinkedList <ListItem> shoppingList;
-
-    /**
-     * Sets starting text to be shown.
-     */
-    private final String startForShoppingList = "Your shopping list " +
-            "now contains: \n";
 
     /**
      * Contains path where files are saved.
@@ -110,61 +66,16 @@ public class MyWindow extends JFrame {
      * @param nonSense for java lint
      */
     private void makeButtonsAndContainers(String nonSense) {
-        newItem = new JButton("New Item");
-        newItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String itemName = JOptionPane.showInputDialog("Please " +
-                        " enter name of the Item");
-                int itemAmount = Integer.parseInt(JOptionPane.showInputDialog(
-                        "Please enter the amount of item(s)"));
-                insertItem(itemName, itemAmount, shoppingList);
-                printShoppingListContent();
-            }
-        });
 
-        newList = new JButton("New List");
-        newList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                shoppingList.clear();
-                items.setText(startForShoppingList);
-            }
-        });
-
-        open = new JButton("Open");
-        open.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tryToLoad();
-            }
-        });
-
-        save = new JButton("Save");
-        save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tryToSave();
-            }
-        });
-
-        combine = new JButton("Combine");
-        combine.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                combineLists();
-            }
-        });
-        dropbox = new JButton("Dropbox");
-        dropbox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setDPOperation();
-            }
-        });
+        ButtonAddItem addItem = new ButtonAddItem(this, "Add Items");
+        ButtonNewList newList = new ButtonNewList(this, "New List");
+        ButtonOpen open = new ButtonOpen(this, "Open");
+        ButtonSave save = new ButtonSave(this, "Save");
+        ButtonCombine combine = new ButtonCombine(this, "Combine");
+        ButtonDropbox dropbox = new ButtonDropbox(this, "Dropbox");
 
         buttonContainer = new JPanel();
-        buttonContainer.add(newItem);
+        buttonContainer.add(addItem);
         buttonContainer.add(newList);
         buttonContainer.add(open);
         buttonContainer.add(save);
@@ -172,131 +83,9 @@ public class MyWindow extends JFrame {
         buttonContainer.add(dropbox);
 
         listContainer = new JPanel();
-        items = new TextArea(startForShoppingList);
+        items = new TextArea(Main.startForShoppingList);
         items.setEditable(false);
         listContainer.add(items);
-    }
-
-    /**
-     * Tries to load existing list.
-     */
-    private void tryToLoad() {
-        JFileChooser fc = new JFileChooser("Open file");
-        System.out.println(path);
-        fc.setCurrentDirectory(new File(path));
-        fc.showOpenDialog(open);
-        File file = fc.getSelectedFile();
-        String path = file.getAbsolutePath();
-        shoppingList.clear();
-
-        try(BufferedReader in = new BufferedReader(new FileReader(path))) {
-            StringBuilder sb = new StringBuilder();
-            String line = in.readLine();
-
-            while (line != null) {
-                String[] temp = line.split(" ");
-                insertItem(temp[1], Integer.parseInt(temp[0]), shoppingList);
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = in.readLine();
-            }
-
-            String everything = sb.toString();
-            System.out.println(everything);
-            updateTextField();
-        } catch(IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * Adds item from given parameters.
-     *
-     * @param name Name of the item.
-     * @param amount Amount of item(s).
-     * @param list MyLinkedList where items are added.
-     */
-    private void insertItem(String name, int amount, MyLinkedList list) {
-        if (amount > 0) {
-            ListItem temp;
-            boolean found = false;
-
-            // If list is empty create new ListItem
-            if (list.size() == 0) {
-                list.add(new ListItem(name, amount));
-            } else {
-
-                for (int i = 0; i < list.size(); i++) {
-                    temp = (ListItem) list.get(i);
-
-                    // If item with the same name is found change its amount
-                    if (temp.getName().equalsIgnoreCase(name)) {
-                        temp.setAmount(temp.getAmount() + amount);
-                        found = true;
-                    }
-                }
-
-                // If not matching items were found, create new ListItem
-                if (!found) {
-                    list.add(new ListItem(name, amount));
-                }
-            }
-
-            updateTextField();
-        }
-    }
-
-    /**
-     * Prints shoppinglist into console.
-     */
-    private void printShoppingListContent() {
-
-        if (shoppingList.size() > 0) {
-            System.out.println("Your Shopping List now:");
-
-            for (int i = 0; i > shoppingList.size(); i++) {
-                System.out.println(shoppingList.get(i).toString());
-            }
-        }
-    }
-
-    /**
-     * Updates text to be shown in text area.
-     *
-     */
-    private void updateTextField() {
-        String temp = startForShoppingList;
-
-        if (!shoppingList.isEmpty()) {
-
-            for (int i = 0; i < shoppingList.size(); i++) {
-                temp += shoppingList.get(i).toString()+"\n";
-            }
-        }
-
-        items.setText(temp);
-    }
-
-    /**
-     * Tries to save the file. Asks the filename from user.
-     *
-     */
-    private void tryToSave() {
-        String saveLocation = JOptionPane.showInputDialog("Please enter" +
-                " filename");
-        try{
-            PrintWriter out = new PrintWriter(path+saveLocation+".txt");
-
-            for (int i = 0; i < shoppingList.size(); i++) {
-                System.out.println("Tallennetaan");
-                ListItem temp = (ListItem)shoppingList.get(i);
-                out.println(temp.description());
-            }
-
-            out.close();
-        } catch(IOException exp) {
-            exp.printStackTrace();
-        }
     }
 
     /**
@@ -316,200 +105,30 @@ public class MyWindow extends JFrame {
     }
 
     /**
-     * Tries to combine two shoppinglists.
+     * Returns list containing list items.
      *
+     * @return return MyLinkedList.
      */
-    private void combineLists() {
-        MyLinkedList<ListItem> tempList = new MyLinkedList<>();
-        JFileChooser fc = new JFileChooser("Choose list to combine");
-        fc.setCurrentDirectory(new File(path));
-        fc.showOpenDialog(open);
-        File file = fc.getSelectedFile();
-        String path = file.getAbsolutePath();
-
-        try(BufferedReader in = new BufferedReader(new FileReader(path))) {
-            StringBuilder sb = new StringBuilder();
-            String line = in.readLine();
-
-            while (line != null) {
-                String[] temp = line.split(" ");
-                insertItem(temp[1], Integer.parseInt(temp[0]), tempList);
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = in.readLine();
-            }
-        } catch(IOException ex) {
-            ex.printStackTrace();
-        }
-
-        for (int i = 0; i < tempList.size(); i++) {
-            ListItem temp =(ListItem)tempList.get(i);
-            insertItem(temp.getName(),temp.getAmount(),shoppingList);
-        }
+    public MyLinkedList getList(){
+        return shoppingList;
     }
 
     /**
-     * Saves the file to Dropbox.
+     * Returns textarea containing shopping list.
      *
+     * @return textarea containing shopping list.
      */
-    private void dropboxSaving() {
-        String fileName = JOptionPane.showInputDialog("Please enter" +
-                " filename");
-        String saveLocation = path + fileName+ ".txt";
-        System.out.println(saveLocation);
-        boolean exists = false;
-
-        // Create temporary text file which is then uploaded to DP.
-        try {
-            PrintWriter out = new PrintWriter(saveLocation);
-
-            for (int i = 0; i < shoppingList.size(); i++) {
-                System.out.println("Tallennetaan");
-                ListItem temp = (ListItem) shoppingList.get(i);
-                out.println(temp.description());
-            }
-
-            out.close();
-        } catch (IOException | SecurityException e) {
-            e.printStackTrace();
-        }
-
-        // Init connection to DP.
-        DbxRequestConfig config = new DbxRequestConfig
-                ("dropbox/ShoppingList-Mikko-Luhtasaari");
-        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
-
-        // Check DP, if file with a same name is found, delete it.
-        try {
-            DbxEntry.WithChildren listing = client.getMetadataWithChildren("/");
-
-            for (DbxEntry child : listing.children) {
-
-                if (child.name.equalsIgnoreCase(fileName+".txt")) {
-                    exists = true;
-                    System.out.println("found");
-                }
-            }
-        } catch (DbxException e) {
-            e.printStackTrace();
-        }
-
-        // Delete the file.
-        if (exists) {
-            try {
-                client.delete("/"+fileName+".txt");
-                System.out.println("deleted from DP!");
-            } catch(DbxException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Create another connection to save the file.
-        DbxClientV2 client2 = new DbxClientV2(config, ACCESS_TOKEN);
-
-        try (InputStream in = new FileInputStream(saveLocation)) {
-            FileMetadata metadata = client2.files().
-                    uploadBuilder("/"+fileName+".txt")
-                    .uploadAndFinish(in);
-        } catch (IOException | DbxException e) {
-            e.printStackTrace();
-        }
-
-        // Delete temporary file.
-        File file = new File(saveLocation);
-
-        if (file.delete()) {
-            System.out.println(file.getName() + " is deleted!");
-        } else {
-            System.out.println("Delete operation is failed.");
-        }
+    public TextArea getItems(){
+        return items;
     }
 
     /**
-     * Loads the file from Dropbox.
+     * Returns path. Path knows from where
+     * it's being run.
      *
+     * @return path.
      */
-    private void dropboxLoading() {
-        DbxRequestConfig config = new DbxRequestConfig
-                ("dropbox/ShoppingList-Mikko-Luhtasaari");
-        DbxClientV1 client = new DbxClientV1(config, ACCESS_TOKEN);
-        String fileNameTemp = JOptionPane.showInputDialog("Please enter" +
-                " filename");
-        String fileName = fileNameTemp+".txt";
-
-        try {
-            FileOutputStream outputStream = new FileOutputStream
-                    (path + fileName);
-            try {
-                DbxEntry.File downloadedFile =
-                        client.getFile("/" + fileName, null,
-                        outputStream);
-            } finally {
-                outputStream.close();
-            }
-        } catch (IOException | DbxException e) {
-            e.printStackTrace();
-        }
-
-        try (BufferedReader in =
-                     new BufferedReader(new FileReader(path + fileName))) {
-            StringBuilder sb = new StringBuilder();
-            String line = in.readLine();
-
-            while (line != null) {
-                String[] temp = line.split(" ");
-                insertItem(temp[1], Integer.parseInt(temp[0]), shoppingList);
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = in.readLine();
-            }
-
-            String everything = sb.toString();
-            System.out.println(everything);
-            updateTextField();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        // Delete temporary file.
-        File file = new File(path+fileName);
-
-        if (file.delete()) {
-            System.out.println(file.getName() + " is deleted!");
-        } else {
-            System.out.println("Delete operation is failed.");
-        }
-    }
-
-    /**
-     * Creates options for loading and saving via DP.
-     *
-     */
-    private void setDPOperation() {
-        Object[] options = {"Save",
-                "Load"};
-        int n = JOptionPane.showOptionDialog(this,
-                "Please select operation",
-                "Files from Dropbox",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
-
-        if (n == -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Clicked cancel.",
-                    "Warning",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-
-        if (n == 0) {
-            dropboxSaving();
-        }
-
-        if (n == 1) {
-            dropboxLoading();
-        }
+    public String getPath(){
+        return path;
     }
 }
