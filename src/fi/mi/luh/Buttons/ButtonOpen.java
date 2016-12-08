@@ -19,14 +19,12 @@ import java.io.IOException;
  * @since 2.0
  */
 public class ButtonOpen extends JButton {
-    private MyLinkedList list;
     private MyWindow window;
     private String name;
     private String path;
 
-    public ButtonOpen(MyLinkedList list, MyWindow window, String name){
+    public ButtonOpen(MyWindow window, String name){
         super(name);
-        this.list = list;
         this.window = window;
         this.name = name;
         this.path = window.getPath();
@@ -42,7 +40,7 @@ public class ButtonOpen extends JButton {
             fc.showOpenDialog(this);
             File file = fc.getSelectedFile();
             String path = file.getAbsolutePath();
-            list.clear();
+            window.getList().clear();
 
             try(BufferedReader in = new BufferedReader(new FileReader(path))) {
                 StringBuilder sb = new StringBuilder();
@@ -50,7 +48,7 @@ public class ButtonOpen extends JButton {
 
                 while (line != null) {
                     String[] temp = line.split(" ");
-                    insertItem(temp[1], Integer.parseInt(temp[0]), list);
+                    insertItem(temp[1], Integer.parseInt(temp[0]), window.getList());
                     sb.append(line);
                     sb.append(System.lineSeparator());
                     line = in.readLine();
@@ -105,10 +103,10 @@ public class ButtonOpen extends JButton {
     private void updateTextField() {
         String temp = Main.startForShoppingList;
 
-        if (!list.isEmpty()) {
+        if (!window.getList().isEmpty()) {
 
-            for (int i = 0; i < list.size(); i++) {
-                temp += list.get(i).toString()+"\n";
+            for (int i = 0; i < window.getList().size(); i++) {
+                temp += window.getList().get(i).toString()+"\n";
             }
         }
 
