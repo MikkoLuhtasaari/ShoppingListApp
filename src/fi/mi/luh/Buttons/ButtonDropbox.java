@@ -17,14 +17,36 @@ import java.io.*;
 import static fi.mi.luh.Main.ACCESS_TOKEN;
 
 /**
- * Created by M1k1tus on 08-Dec-16.
+ * Creates button which connects to Dropbox.
+ *
+ * @author Mikko Luhtasaari
+ * @version 1.0, 8 Dec 2016
+ * @since 2.0
  */
 public class ButtonDropbox extends JButton {
 
+    /**
+     * Stores main view.
+     */
     private MyWindow window;
+
+    /**
+     * Stores buttons name.
+     */
     private String name;
+
+    /**
+     * Stores the path to this app.
+     */
     private String path;
 
+    /**
+     * Constructs the button.
+     * Enables Dropbox saving and loading.
+     *
+     * @param window main view.
+     * @param name buttons name.
+     */
     public ButtonDropbox(MyWindow window, String name){
         super(name);
         this.window = window;
@@ -34,6 +56,9 @@ public class ButtonDropbox extends JButton {
         addMyActionListener();
     }
 
+    /**
+     * Adds action listener.
+     */
     private void addMyActionListener(){
         this.addActionListener(e ->{
             Object[] options = {"Save",
@@ -251,6 +276,11 @@ public class ButtonDropbox extends JButton {
         }
     }
 
+    /**
+     * Returns buttons name.
+     *
+     * @return buttons name.
+     */
     public String getName(){
         return name;
     }
