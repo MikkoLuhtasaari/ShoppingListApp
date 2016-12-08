@@ -20,14 +20,12 @@ import java.io.IOException;
  */
 public class ButtonCombine extends JButton {
 
-    private MyLinkedList list;
     private MyWindow window;
     private String name;
     private String path;
 
-    public ButtonCombine(MyLinkedList list, MyWindow window, String name){
+    public ButtonCombine(MyWindow window, String name){
         super(name);
-        this.list = list;
         this.window = window;
         this.name = name;
         this.path = window.getPath();
@@ -61,7 +59,7 @@ public class ButtonCombine extends JButton {
 
             for (int i = 0; i < tempList.size(); i++) {
                 ListItem temp = (ListItem) tempList.get(i);
-                insertItem(temp.getName(), temp.getAmount(), list);
+                insertItem(temp.getName(), temp.getAmount(), window.getList());
             }
         });
     }
@@ -110,10 +108,10 @@ public class ButtonCombine extends JButton {
     public void updateTextField() {
         String temp = Main.startForShoppingList;
 
-        if (!list.isEmpty()) {
+        if (!window.getList().isEmpty()) {
 
-            for (int i = 0; i < list.size(); i++) {
-                temp += list.get(i).toString()+"\n";
+            for (int i = 0; i < window.getList().size(); i++) {
+                temp += window.getList().get(i).toString()+"\n";
             }
         }
 
