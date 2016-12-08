@@ -1,7 +1,6 @@
 package fi.mi.luh.Buttons;
 
 import fi.mi.luh.Main;
-import fi.mi.luh.MyLinkedList;
 import fi.mi.luh.MyWindow;
 
 import javax.swing.*;
@@ -15,9 +14,23 @@ import javax.swing.*;
  */
 public class ButtonNewList extends JButton {
 
+    /**
+     * Stores main view.
+     */
     private MyWindow window;
+
+    /**
+     * Stores buttons name.
+     */
     private String name;
 
+    /**
+     * Constructs button.
+     * Clears existing shoppinglist.
+     *
+     * @param window main view.
+     * @param name buttons name.
+     */
     public ButtonNewList(MyWindow window, String name){
         super(name);
         this.window = window;
@@ -26,6 +39,9 @@ public class ButtonNewList extends JButton {
         addMyActionListener();
     }
 
+    /**
+     * Add action listener.
+     */
     private void addMyActionListener(){
         this.addActionListener(e -> {
             window.getList().clear();
@@ -33,6 +49,11 @@ public class ButtonNewList extends JButton {
         });
     }
 
+    /**
+     * Returns buttons name.
+     *
+     * @return buttons name.
+     */
     public String getName(){
         return name;
     }
