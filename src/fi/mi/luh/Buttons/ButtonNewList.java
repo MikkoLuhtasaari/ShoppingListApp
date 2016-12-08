@@ -15,13 +15,11 @@ import javax.swing.*;
  */
 public class ButtonNewList extends JButton {
 
-    private MyLinkedList list;
     private MyWindow window;
     private String name;
 
-    public ButtonNewList(MyLinkedList list, MyWindow window, String name){
+    public ButtonNewList(MyWindow window, String name){
         super(name);
-        this.list = list;
         this.window = window;
         this.name = name;
 
@@ -30,7 +28,7 @@ public class ButtonNewList extends JButton {
 
     private void addMyActionListener(){
         this.addActionListener(e -> {
-            list.clear();
+            window.getList().clear();
             window.getItems().setText(Main.startForShoppingList);
         });
     }
