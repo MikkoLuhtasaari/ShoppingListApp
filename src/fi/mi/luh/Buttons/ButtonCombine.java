@@ -20,10 +20,28 @@ import java.io.IOException;
  */
 public class ButtonCombine extends JButton {
 
+    /**
+     * Stores main view.
+     */
     private MyWindow window;
+
+    /**
+     * Stores buttons name.
+     */
     private String name;
+
+    /**
+     * Stores the path.
+     */
     private String path;
 
+    /**
+     * Constructs button.
+     * Combines two shopping lists.
+     *
+     * @param window main view.
+     * @param name buttons name.
+     */
     public ButtonCombine(MyWindow window, String name){
         super(name);
         this.window = window;
@@ -33,6 +51,9 @@ public class ButtonCombine extends JButton {
         addMyActionListener();
     }
 
+    /**
+     * Adds action listener.
+     */
     private void addMyActionListener() {
         this.addActionListener(e -> {
             MyLinkedList<ListItem> tempList = new MyLinkedList<>();
@@ -118,6 +139,11 @@ public class ButtonCombine extends JButton {
         window.getItems().setText(temp);
     }
 
+    /**
+     * Returns buttons name.
+     *
+     * @return buttons name.
+     */
     public String getName(){
         return name;
     }
