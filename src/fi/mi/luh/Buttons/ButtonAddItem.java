@@ -27,6 +27,7 @@ public class ButtonAddItem extends JButton {
 
     /**
      * Constructs button and adds action listener.
+     * Adds items to shopping list.
      *
      * @param window main view.
      * @param name name of the button.
