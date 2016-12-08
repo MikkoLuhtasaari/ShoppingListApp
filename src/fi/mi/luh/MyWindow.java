@@ -6,7 +6,8 @@ import com.dropbox.core.v1.DbxClientV1;
 import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
-import fi.mi.luh.Buttons.AddItemButton;
+import fi.mi.luh.Buttons.ButtonAddItem;
+import fi.mi.luh.Buttons.ButtonNewList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,18 +27,8 @@ import static fi.mi.luh.Main.ACCESS_TOKEN;
  */
 public class MyWindow extends JFrame {
 
-    private AddItemButton addItem;
-
-
-    /**
-     * Adds new items.
-     */
-    private JButton newItem;
-
-    /**
-     * Clears the list.
-     */
-    private JButton newList;
+    private ButtonAddItem addItem;
+    private ButtonNewList newList;
 
     /**
      * Opens another list.
@@ -108,29 +99,9 @@ public class MyWindow extends JFrame {
      * @param nonSense for java lint
      */
     private void makeButtonsAndContainers(String nonSense) {
-        /*newItem = new JButton("New Item");
-        newItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String itemName = JOptionPane.showInputDialog("Please " +
-                        " enter name of the Item");
-                int itemAmount = Integer.parseInt(JOptionPane.showInputDialog(
-                        "Please enter the amount of item(s)"));
-                insertItem(itemName, itemAmount, shoppingList);
-                printShoppingListContent();
-            }
-        });*/
-        addItem = new AddItemButton(shoppingList,this,"Add Items");
 
-
-        newList = new JButton("New List");
-        newList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                shoppingList.clear();
-                items.setText(Main.startForShoppingList);
-            }
-        });
+        addItem = new ButtonAddItem(shoppingList, this, "Add Items");
+        newList = new ButtonNewList(shoppingList, this, "New List");
 
         open = new JButton("Open");
         open.addActionListener(new ActionListener() {

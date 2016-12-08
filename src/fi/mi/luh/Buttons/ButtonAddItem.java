@@ -10,19 +10,18 @@ import javax.swing.*;
 /**
  * Created by M1k1tus on 08-Dec-16.
  */
-public class AddItemButton extends JButton {
-    MyLinkedList list;
-    MyWindow window;
-    String name;
+public class ButtonAddItem extends JButton {
+    private MyLinkedList list;
+    private MyWindow window;
+    private String name;
 
-    public AddItemButton(MyLinkedList list, MyWindow window, String name){
+    public ButtonAddItem(MyLinkedList list, MyWindow window, String name){
         super(name);
         this.list = list;
         this.window = window;
         this.name = name;
 
         addMyActionListener();
-        //window.add(this);
     }
 
     private void addMyActionListener() {
