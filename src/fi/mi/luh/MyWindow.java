@@ -8,6 +8,7 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import fi.mi.luh.Buttons.ButtonAddItem;
 import fi.mi.luh.Buttons.ButtonNewList;
+import fi.mi.luh.Buttons.ButtonOpen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,11 +30,7 @@ public class MyWindow extends JFrame {
 
     private ButtonAddItem addItem;
     private ButtonNewList newList;
-
-    /**
-     * Opens another list.
-     */
-    private JButton open;
+    private ButtonOpen open;
 
     /**
      * Saves the list.
@@ -102,14 +99,7 @@ public class MyWindow extends JFrame {
 
         addItem = new ButtonAddItem(shoppingList, this, "Add Items");
         newList = new ButtonNewList(shoppingList, this, "New List");
-
-        open = new JButton("Open");
-        open.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tryToLoad();
-            }
-        });
+        open = new ButtonOpen(shoppingList, this, "Open");
 
         save = new JButton("Save");
         save.addActionListener(new ActionListener() {
@@ -486,5 +476,9 @@ public class MyWindow extends JFrame {
 
     public TextArea getItems(){
         return items;
+    }
+
+    public String getPath(){
+        return path;
     }
 }
