@@ -6,6 +6,7 @@ import com.dropbox.core.v1.DbxClientV1;
 import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import fi.mi.luh.Buttons.AddItemButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +25,9 @@ import static fi.mi.luh.Main.ACCESS_TOKEN;
  * @since 1.0
  */
 public class MyWindow extends JFrame {
+
+    private AddItemButton addItem;
+
 
     /**
      * Adds new items.
@@ -76,12 +80,6 @@ public class MyWindow extends JFrame {
     private MyLinkedList <ListItem> shoppingList;
 
     /**
-     * Sets starting text to be shown.
-     */
-    private final String startForShoppingList = "Your shopping list " +
-            "now contains: \n";
-
-    /**
      * Contains path where files are saved.
      */
     private String path;
@@ -110,7 +108,7 @@ public class MyWindow extends JFrame {
      * @param nonSense for java lint
      */
     private void makeButtonsAndContainers(String nonSense) {
-        newItem = new JButton("New Item");
+        /*newItem = new JButton("New Item");
         newItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -121,14 +119,16 @@ public class MyWindow extends JFrame {
                 insertItem(itemName, itemAmount, shoppingList);
                 printShoppingListContent();
             }
-        });
+        });*/
+        addItem = new AddItemButton(shoppingList,this,"Add Items");
+
 
         newList = new JButton("New List");
         newList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 shoppingList.clear();
-                items.setText(startForShoppingList);
+                items.setText(Main.startForShoppingList);
             }
         });
 
@@ -164,7 +164,7 @@ public class MyWindow extends JFrame {
         });
 
         buttonContainer = new JPanel();
-        buttonContainer.add(newItem);
+        buttonContainer.add(addItem);
         buttonContainer.add(newList);
         buttonContainer.add(open);
         buttonContainer.add(save);
@@ -172,7 +172,7 @@ public class MyWindow extends JFrame {
         buttonContainer.add(dropbox);
 
         listContainer = new JPanel();
-        items = new TextArea(startForShoppingList);
+        items = new TextArea(Main.startForShoppingList);
         items.setEditable(false);
         listContainer.add(items);
     }
@@ -264,8 +264,8 @@ public class MyWindow extends JFrame {
      * Updates text to be shown in text area.
      *
      */
-    private void updateTextField() {
-        String temp = startForShoppingList;
+    public void updateTextField() {
+        String temp = Main.startForShoppingList;
 
         if (!shoppingList.isEmpty()) {
 
@@ -511,5 +511,9 @@ public class MyWindow extends JFrame {
         if (n == 1) {
             dropboxLoading();
         }
+    }
+
+    public TextArea getItems(){
+        return items;
     }
 }

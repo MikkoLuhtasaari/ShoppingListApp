@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="dropbox-core-sdk-2.1.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/fi/mi/luh/dropbox-core-sdk-2.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
