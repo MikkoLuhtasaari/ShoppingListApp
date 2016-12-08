@@ -7,7 +7,11 @@ import fi.mi.luh.MyWindow;
 import javax.swing.*;
 
 /**
- * Created by M1k1tus on 08-Dec-16.
+ * Creates button which can clear given MyLinkedList.
+ *
+ * @author Mikko Luhtasaari
+ * @version 1.0, 8 Dec 2016
+ * @since 2.0
  */
 public class ButtonNewList extends JButton {
 
