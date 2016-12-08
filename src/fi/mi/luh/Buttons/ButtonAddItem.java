@@ -15,13 +15,11 @@ import javax.swing.*;
  * @since 2.0
  */
 public class ButtonAddItem extends JButton {
-    private MyLinkedList list;
     private MyWindow window;
     private String name;
 
-    public ButtonAddItem(MyLinkedList list, MyWindow window, String name){
+    public ButtonAddItem(MyWindow window, String name){
         super(name);
-        this.list = list;
         this.window = window;
         this.name = name;
 
@@ -34,7 +32,7 @@ public class ButtonAddItem extends JButton {
                     " enter name of the Item");
             int itemAmount = Integer.parseInt(JOptionPane.showInputDialog(
                     "Please enter the amount of item(s)"));
-            insertItem(itemName, itemAmount, list);
+            insertItem(itemName, itemAmount, window.getList());
         });
     }
 
@@ -82,10 +80,10 @@ public class ButtonAddItem extends JButton {
     private void updateTextField() {
         String temp = Main.startForShoppingList;
 
-        if (!list.isEmpty()) {
+        if (!window.getList().isEmpty()) {
 
-            for (int i = 0; i < list.size(); i++) {
-                temp += list.get(i).toString()+"\n";
+            for (int i = 0; i < window.getList().size(); i++) {
+                temp += window.getList().get(i).toString()+"\n";
             }
         }
 
