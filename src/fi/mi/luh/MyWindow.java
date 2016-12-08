@@ -9,6 +9,7 @@ import com.dropbox.core.v2.files.FileMetadata;
 import fi.mi.luh.Buttons.ButtonAddItem;
 import fi.mi.luh.Buttons.ButtonNewList;
 import fi.mi.luh.Buttons.ButtonOpen;
+import fi.mi.luh.Buttons.ButtonSave;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,11 +32,7 @@ public class MyWindow extends JFrame {
     private ButtonAddItem addItem;
     private ButtonNewList newList;
     private ButtonOpen open;
-
-    /**
-     * Saves the list.
-     */
-    private JButton save;
+    private ButtonSave save;
 
     /**
      * Combines two lists. Currently not in use. Does nothing in version 1.0.
@@ -100,14 +97,7 @@ public class MyWindow extends JFrame {
         addItem = new ButtonAddItem(shoppingList, this, "Add Items");
         newList = new ButtonNewList(shoppingList, this, "New List");
         open = new ButtonOpen(shoppingList, this, "Open");
-
-        save = new JButton("Save");
-        save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tryToSave();
-            }
-        });
+        save = new ButtonSave(shoppingList, this, "Save");
 
         combine = new JButton("Combine");
         combine.addActionListener(new ActionListener() {
