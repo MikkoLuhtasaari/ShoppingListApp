@@ -1,20 +1,10 @@
 package fi.mi.luh;
 
-import com.dropbox.core.DbxException;
-import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.v1.DbxClientV1;
-import com.dropbox.core.v1.DbxEntry;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
 import fi.mi.luh.Buttons.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.*;
 
-import static fi.mi.luh.Main.ACCESS_TOKEN;
 
 /**
  * Creates window to be shown.
@@ -25,13 +15,6 @@ import static fi.mi.luh.Main.ACCESS_TOKEN;
  * @since 1.0
  */
 public class MyWindow extends JFrame {
-
-    private ButtonAddItem addItem;
-    private ButtonNewList newList;
-    private ButtonOpen open;
-    private ButtonSave save;
-    private ButtonCombine combine;
-    private ButtonDropbox dropbox;
 
     /**
      * Shows this shoppinglist.
@@ -83,12 +66,12 @@ public class MyWindow extends JFrame {
      */
     private void makeButtonsAndContainers(String nonSense) {
 
-        addItem = new ButtonAddItem(shoppingList, this, "Add Items");
-        newList = new ButtonNewList(shoppingList, this, "New List");
-        open = new ButtonOpen(shoppingList, this, "Open");
-        save = new ButtonSave(shoppingList, this, "Save");
-        combine = new ButtonCombine(shoppingList, this, "Combine");
-        dropbox = new ButtonDropbox(shoppingList, this, "Dropbox");
+        ButtonAddItem addItem = new ButtonAddItem(this, "Add Items");
+        ButtonNewList newList = new ButtonNewList(this, "New List");
+        ButtonOpen open = new ButtonOpen(this, "Open");
+        ButtonSave save = new ButtonSave(this, "Save");
+        ButtonCombine combine = new ButtonCombine(this, "Combine");
+        ButtonDropbox dropbox = new ButtonDropbox(this, "Dropbox");
 
         buttonContainer = new JPanel();
         buttonContainer.add(addItem);
@@ -120,14 +103,30 @@ public class MyWindow extends JFrame {
         }
     }
 
+    /**
+     * Returns list containing list items.
+     *
+     * @return return MyLinkedList.
+     */
     public MyLinkedList getList(){
         return shoppingList;
     }
 
+    /**
+     * Returns textarea containing shopping list.
+     *
+     * @return textarea containing shopping list.
+     */
     public TextArea getItems(){
         return items;
     }
 
+    /**
+     * Returns path. Path knows from where
+     * it's being run.
+     *
+     * @return path.
+     */
     public String getPath(){
         return path;
     }
