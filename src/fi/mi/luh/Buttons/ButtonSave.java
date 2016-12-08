@@ -15,10 +15,29 @@ import java.io.PrintWriter;
  * @since 2.0
  */
 public class ButtonSave extends JButton {
+
+    /**
+     * Stores main view.
+     */
     private MyWindow window;
+
+    /**
+     * Stores buttons name.
+     */
     private String name;
+
+    /**
+     * Stores the path to this app.
+     */
     private String path;
 
+    /**
+     * Constructs button.
+     * Saves shoppinglist to a text file.
+     *
+     * @param window main view.
+     * @param name buttons name.
+     */
     public ButtonSave(MyWindow window, String name){
         super(name);
         this.window = window;
@@ -28,6 +47,9 @@ public class ButtonSave extends JButton {
         addMyActionListener();
     }
 
+    /**
+     * Adds action listener.
+     */
     private void addMyActionListener(){
         this.addActionListener(e -> {
             String saveLocation = JOptionPane.showInputDialog("Please enter" +
@@ -48,6 +70,11 @@ public class ButtonSave extends JButton {
         });
     }
 
+    /**
+     * Returns buttons name.
+     *
+     * @return buttons name.
+     */
     public String getName(){
         return name;
     }
