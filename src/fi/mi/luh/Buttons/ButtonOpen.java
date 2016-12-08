@@ -19,10 +19,29 @@ import java.io.IOException;
  * @since 2.0
  */
 public class ButtonOpen extends JButton {
+
+    /**
+     * Stores main view.
+     */
     private MyWindow window;
+
+    /**
+     * Stores buttons name.
+     */
     private String name;
+
+    /**
+     * Stores the path to this app.
+     */
     private String path;
 
+    /**
+     * Constructs button.
+     * Opens existing shopping lists.
+     *
+     * @param window main view.
+     * @param name buttons name.
+     */
     public ButtonOpen(MyWindow window, String name){
         super(name);
         this.window = window;
@@ -32,6 +51,9 @@ public class ButtonOpen extends JButton {
         addMyActionListener();
     }
 
+    /**
+     * Adds action listener.
+     */
     private void addMyActionListener(){
         this.addActionListener(e -> {
             JFileChooser fc = new JFileChooser("Open file");
@@ -100,6 +122,9 @@ public class ButtonOpen extends JButton {
         }
     }
 
+    /**
+     * Updates the text field.
+     */
     private void updateTextField() {
         String temp = Main.startForShoppingList;
 
@@ -113,6 +138,11 @@ public class ButtonOpen extends JButton {
         window.getItems().setText(temp);
     }
 
+    /**
+     * Returns buttons name.
+     *
+     * @return buttons name.
+     */
     public String getName(){
         return name;
     }
