@@ -6,10 +6,7 @@ import com.dropbox.core.v1.DbxClientV1;
 import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
-import fi.mi.luh.Buttons.ButtonAddItem;
-import fi.mi.luh.Buttons.ButtonNewList;
-import fi.mi.luh.Buttons.ButtonOpen;
-import fi.mi.luh.Buttons.ButtonSave;
+import fi.mi.luh.Buttons.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,11 +30,7 @@ public class MyWindow extends JFrame {
     private ButtonNewList newList;
     private ButtonOpen open;
     private ButtonSave save;
-
-    /**
-     * Combines two lists. Currently not in use. Does nothing in version 1.0.
-     */
-    private JButton combine;
+    private ButtonCombine combine;
 
     /**
      * Saves and loads from DP. Does nothing in version 1.0.
@@ -98,14 +91,8 @@ public class MyWindow extends JFrame {
         newList = new ButtonNewList(shoppingList, this, "New List");
         open = new ButtonOpen(shoppingList, this, "Open");
         save = new ButtonSave(shoppingList, this, "Save");
+        combine = new ButtonCombine(shoppingList, this, "Combine");
 
-        combine = new JButton("Combine");
-        combine.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                combineLists();
-            }
-        });
         dropbox = new JButton("Dropbox");
         dropbox.addActionListener(new ActionListener() {
             @Override
