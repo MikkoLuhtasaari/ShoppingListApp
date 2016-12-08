@@ -21,14 +21,12 @@ import static fi.mi.luh.Main.ACCESS_TOKEN;
  */
 public class ButtonDropbox extends JButton {
 
-    private MyLinkedList list;
     private MyWindow window;
     private String name;
     private String path;
 
-    public ButtonDropbox(MyLinkedList list, MyWindow window, String name){
+    public ButtonDropbox(MyWindow window, String name){
         super(name);
-        this.list = list;
         this.window = window;
         this.name = name;
         this.path = window.getPath();
@@ -99,7 +97,7 @@ public class ButtonDropbox extends JButton {
 
             while (line != null) {
                 String[] temp = line.split(" ");
-                insertItem(temp[1], Integer.parseInt(temp[0]), list);
+                insertItem(temp[1], Integer.parseInt(temp[0]), window.getList());
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
@@ -137,9 +135,9 @@ public class ButtonDropbox extends JButton {
         try {
             PrintWriter out = new PrintWriter(saveLocation);
 
-            for (int i = 0; i < list.size(); i++) {
+            for (int i = 0; i < window.getList().size(); i++) {
                 System.out.println("Tallennetaan");
-                ListItem temp = (ListItem) list.get(i);
+                ListItem temp = (ListItem) window.getList().get(i);
                 out.println(temp.description());
             }
 
@@ -206,10 +204,10 @@ public class ButtonDropbox extends JButton {
     public void updateTextField() {
         String temp = Main.startForShoppingList;
 
-        if (!list.isEmpty()) {
+        if (!window.getList().isEmpty()) {
 
-            for (int i = 0; i < list.size(); i++) {
-                temp += list.get(i).toString()+"\n";
+            for (int i = 0; i < window.getList().size(); i++) {
+                temp += window.getList().get(i).toString()+"\n";
             }
         }
 
