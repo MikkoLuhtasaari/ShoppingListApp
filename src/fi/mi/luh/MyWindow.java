@@ -88,10 +88,6 @@ public class MyWindow extends JFrame {
         listContainer = new JPanel();
         listContainer.setBackground(new Color(145,145,145));
         listContainer.setLayout(new GridLayout(10,1));
-        //listContainer.setBackground(new Color(0,0,0));
-        /*items = new TextArea(Main.startForShoppingList);
-        items.setEditable(false);
-        listContainer.add(items);*/
     }
 
     /**
@@ -138,6 +134,11 @@ public class MyWindow extends JFrame {
         return path;
     }
 
+    /**
+     * Returns listContainer
+     *
+     * @return listContainer
+     */
     public JPanel getListContainer() {
         return listContainer;
     }
