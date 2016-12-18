@@ -45,7 +45,8 @@ public class ButtonNewList extends JButton {
     private void addMyActionListener(){
         this.addActionListener(e -> {
             window.getList().clear();
-            window.getItems().setText(Main.startForShoppingList);
+            window.getListContainer().removeAll();
+            window.getListContainer().updateUI();
         });
     }
 

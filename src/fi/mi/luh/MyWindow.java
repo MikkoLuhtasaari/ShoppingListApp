@@ -79,11 +79,11 @@ public class MyWindow extends JFrame {
 
         buttonContainer = new JPanel();
         buttonContainer.add(addItem);
-        //buttonContainer.add(newList);
-        //buttonContainer.add(open);
-        //buttonContainer.add(save);
-        //buttonContainer.add(combine);
-        //buttonContainer.add(dropbox);
+        buttonContainer.add(newList);
+        buttonContainer.add(open);
+        buttonContainer.add(save);
+        buttonContainer.add(combine);
+        buttonContainer.add(dropbox);
 
         listContainer = new JPanel();
         listContainer.setBackground(new Color(145,145,145));
