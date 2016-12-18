@@ -93,19 +93,17 @@ public class ButtonAddItem extends JButton {
     }
 
     /**
-     * Updates text to be shown in text area.
+     * Updates buttons in listContainer
      *
      */
     private void updateTextField() {
         window.getListContainer().removeAll();
-        System.out.println("Removed all");
+
         for (int i = 0; i < window.getList().size(); i++) {
-            System.out.println("Add button");
             ListItem tempItem = (ListItem)window.getList().get(i);
             JButton temp = new JButton(tempItem.getName()+" "+tempItem.getAmount());
             temp.setBackground(new Color(0,0,0));
             temp.setForeground(new Color(255,255,255));
-            //temp.setSize(this.window.getListContainer().getWidth(),this.window.getHeight()/10);
             temp.addActionListener(e -> {
                 this.window.getList().remove(tempItem);
                 this.window.getListContainer().remove(temp);
