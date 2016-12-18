@@ -57,32 +57,36 @@ public class ButtonOpen extends JButton {
     private void addMyActionListener(){
         this.addActionListener(e -> {
             JFileChooser fc = new JFileChooser("Open file");
-            System.out.println(path);
             fc.setCurrentDirectory(new File(path));
-            fc.showOpenDialog(this);
-            File file = fc.getSelectedFile();
-            String path = file.getAbsolutePath();
-            window.getList().clear();
+            int returnVal = fc.showOpenDialog(this);
+            System.out.println(path);
+            //fc.showOpenDialog(this);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        File file = fc.getSelectedFile();
+                        String path = file.getAbsolutePath();
+                        window.getList().clear();
 
-            try(BufferedReader in = new BufferedReader(new FileReader(path))) {
-                StringBuilder sb = new StringBuilder();
-                String line = in.readLine();
+                        try (BufferedReader in = new BufferedReader(new FileReader(path))) {
+                            StringBuilder sb = new StringBuilder();
+                            String line = in.readLine();
 
-                while (line != null) {
-                    String[] temp = line.split(" ");
-                    insertItem(temp[1], Integer.parseInt(temp[0]), window.getList());
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                    line = in.readLine();
-                }
+                            while (line != null) {
+                                String[] temp = line.split(" ");
+                                insertItem(temp[1], Integer.parseInt(temp[0]), window.getList());
+                                sb.append(line);
+                                sb.append(System.lineSeparator());
+                                line = in.readLine();
+                            }
 
-                String everything = sb.toString();
-                System.out.println(everything);
-                updateTextField();
-            } catch(IOException ex) {
-                ex.printStackTrace();
-            }
-
+                            String everything = sb.toString();
+                            System.out.println(everything);
+                            updateTextField();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    } else {
+                        System.out.println("User cancelled operation");
+                    }
 
         });
     }

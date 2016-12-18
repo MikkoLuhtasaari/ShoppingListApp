@@ -5,6 +5,9 @@ import fi.mi.luh.Buttons.*;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
 /**
@@ -85,6 +88,18 @@ public class MyWindow extends JFrame {
         listContainer = new JPanel();
         items = new TextArea(Main.startForShoppingList);
         items.setEditable(false);
+        items.addMouseListener(new MouseAdapter() {
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                System.out.println();
+            }
+        });
         listContainer.add(items);
     }
 
