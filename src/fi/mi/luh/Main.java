@@ -22,9 +22,11 @@ public class Main {
      * @param args command line parameter
      */
     public static void main(String[] args) {
-        //System.out.println(ACCESS_TOKEN);
-        // CLI juttu = new CLI();
-        // juttu.run();
-        GUI testi = new GUI();
+
+        if (args.length == 1 && args[0].equalsIgnoreCase("--cli")) {
+            CLI juttu = new CLI();
+        } else {
+            GUI testi = new GUI();
+        }
     }
 }
