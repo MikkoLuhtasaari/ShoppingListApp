@@ -126,6 +126,7 @@ public class ButtonOpen extends JButton {
         }
     }
 
+    //TODO fix this. Template can be found from ButtonAddItem.
     /**
      * Updates the text field.
      */

@@ -222,6 +222,7 @@ public class ButtonDropbox extends JButton {
         }
     }
 
+    // TODO fix this. Template from ButtonAddItem.
     /**
      * Updates text to be shown in text area.
      *
