@@ -11,7 +11,7 @@ import java.util.Scanner;
  * @version 1.0, 14 Nov 2016
  * @since 1.0
  */
-public class CLI implements Runnable {
+public class CLI {
 
     /**
      * Scanner for reading user input from command prompt.
@@ -40,13 +40,6 @@ public class CLI implements Runnable {
         System.out.println("Tampere University of Applied Sciences");
         System.out.println("Give shopping list (example: 1" +
                 " milk;2 tomato;3 carrot;)");
-    }
-
-    /**
-     * Runs the app.
-     */
-    @Override
-    public void run() {
         while (!input.equalsIgnoreCase("exit")) {
             input = reader.nextLine();
 

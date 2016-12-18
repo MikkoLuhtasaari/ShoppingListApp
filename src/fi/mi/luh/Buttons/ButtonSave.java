@@ -54,20 +54,25 @@ public class ButtonSave extends JButton {
         this.addActionListener(e -> {
             String saveLocation = JOptionPane.showInputDialog("Please enter" +
                     " filename");
-            try{
-                PrintWriter out = new PrintWriter(path+saveLocation+".txt");
+            if(!saveLocation.equalsIgnoreCase("")) {
+                try {
+                    PrintWriter out = new PrintWriter(path + saveLocation + ".txt");
 
-                for (int i = 0; i < window.getList().size(); i++) {
-                    System.out.println("Tallennetaan");
-                    ListItem temp = (ListItem)window.getList().get(i);
-                    out.println(temp.description());
+                    for (int i = 0; i < window.getList().size(); i++) {
+                        System.out.println("Tallennetaan");
+                        ListItem temp = (ListItem) window.getList().get(i);
+                        out.println(temp.description());
+                    }
+
+                    out.close();
+                } catch (IOException exp) {
+                    exp.printStackTrace();
                 }
-
-                out.close();
-            } catch(IOException exp) {
-                exp.printStackTrace();
+            } else {
+                System.out.println("User cancelled operation");
             }
         });
+
     }
 
     /**
