@@ -6,6 +6,7 @@ import fi.mi.luh.MyLinkedList;
 import fi.mi.luh.MyWindow;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Creates button which can add new items to MyLinkedList.
@@ -96,16 +97,23 @@ public class ButtonAddItem extends JButton {
      *
      */
     private void updateTextField() {
-        String temp = Main.startForShoppingList;
-
-        if (!window.getList().isEmpty()) {
-
-            for (int i = 0; i < window.getList().size(); i++) {
-                temp += window.getList().get(i).toString()+"\n";
-            }
+        window.getListContainer().removeAll();
+        System.out.println("Removed all");
+        for (int i = 0; i < window.getList().size(); i++) {
+            System.out.println("Add button");
+            ListItem tempItem = (ListItem)window.getList().get(i);
+            JButton temp = new JButton(tempItem.getName()+" "+tempItem.getAmount());
+            temp.setBackground(new Color(0,0,0));
+            temp.setForeground(new Color(255,255,255));
+            //temp.setSize(this.window.getListContainer().getWidth(),this.window.getHeight()/10);
+            temp.addActionListener(e -> {
+                this.window.getList().remove(tempItem);
+                this.window.getListContainer().remove(temp);
+                window.getListContainer().updateUI();
+            });
+            window.getListContainer().add(temp);
         }
-
-        window.getItems().setText(temp);
+        window.getListContainer().updateUI();
     }
 
     /**

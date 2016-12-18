@@ -79,28 +79,19 @@ public class MyWindow extends JFrame {
 
         buttonContainer = new JPanel();
         buttonContainer.add(addItem);
-        buttonContainer.add(newList);
-        buttonContainer.add(open);
-        buttonContainer.add(save);
-        buttonContainer.add(combine);
-        buttonContainer.add(dropbox);
+        //buttonContainer.add(newList);
+        //buttonContainer.add(open);
+        //buttonContainer.add(save);
+        //buttonContainer.add(combine);
+        //buttonContainer.add(dropbox);
 
         listContainer = new JPanel();
-        items = new TextArea(Main.startForShoppingList);
+        listContainer.setBackground(new Color(145,145,145));
+        listContainer.setLayout(new GridLayout(10,1));
+        //listContainer.setBackground(new Color(0,0,0));
+        /*items = new TextArea(Main.startForShoppingList);
         items.setEditable(false);
-        items.addMouseListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                System.out.println();
-            }
-        });
-        listContainer.add(items);
+        listContainer.add(items);*/
     }
 
     /**
@@ -145,5 +136,9 @@ public class MyWindow extends JFrame {
      */
     public String getPath(){
         return path;
+    }
+
+    public JPanel getListContainer() {
+        return listContainer;
     }
 }
