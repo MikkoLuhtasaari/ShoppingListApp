@@ -7,11 +7,11 @@ import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import fi.mi.luh.ListItem;
-import fi.mi.luh.Main;
 import fi.mi.luh.MyLinkedList;
 import fi.mi.luh.MyWindow;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 
 import static fi.mi.luh.Main.ACCESS_TOKEN;
@@ -222,22 +222,56 @@ public class ButtonDropbox extends JButton {
         }
     }
 
-    // TODO fix this. Template from ButtonAddItem.
     /**
-     * Updates text to be shown in text area.
+     * Updates buttons in listContainer.
      *
      */
-    public void updateTextField() {
-        String temp = Main.startForShoppingList;
+    private void updateTextField() {
+        window.getListContainer().removeAll();
 
-        if (!window.getList().isEmpty()) {
+        for (int i = 0; i < window.getList().size(); i++) {
+            ListItem tempItem = (ListItem)window.getList().get(i);
+            JButton temp = new JButton(tempItem.getName()+
+                    " "+tempItem.getAmount());
+            temp.setBackground(new Color(0, 0, 0));
+            temp.setForeground(new Color(255, 255, 255));
+            temp.addActionListener(e -> {
+                Object[] options = {"Delete",
+                        "Change amount"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "Please select operation",
+                        "Files from Dropbox",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
 
-            for (int i = 0; i < window.getList().size(); i++) {
-                temp += window.getList().get(i).toString()+"\n";
-            }
+                if (n == -1) {
+                    JOptionPane.showMessageDialog(this,
+                            "Clicked cancel.",
+                            "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
+                if (n == 0) {
+                    this.window.getList().remove(tempItem);
+                    this.window.getListContainer().remove(temp);
+                    window.getListContainer().updateUI();
+                }
+
+                if (n == 1) {
+                    int itemAmount = Integer.parseInt(JOptionPane.
+                            showInputDialog(
+                                    "Please enter the amount of item(s)"));
+                    tempItem.setAmount(itemAmount);
+                    temp.setText(tempItem.getName()+" "+tempItem.getAmount());
+                }
+            });
+            window.getListContainer().add(temp);
         }
 
-        window.getItems().setText(temp);
+        window.getListContainer().updateUI();
     }
 
     /**

@@ -1,7 +1,6 @@
 package fi.mi.luh.Buttons;
 
 import fi.mi.luh.ListItem;
-import fi.mi.luh.Main;
 import fi.mi.luh.MyLinkedList;
 import fi.mi.luh.MyWindow;
 
