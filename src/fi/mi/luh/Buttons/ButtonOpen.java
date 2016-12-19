@@ -37,12 +37,13 @@ public class ButtonOpen extends JButton {
 
     /**
      * Constructs button.
+     *
      * Opens existing shopping lists.
      *
      * @param window main view.
      * @param name buttons name.
      */
-    public ButtonOpen(MyWindow window, String name){
+    public ButtonOpen(MyWindow window, String name) {
         super(name);
         this.window = window;
         this.name = name;
@@ -54,23 +55,26 @@ public class ButtonOpen extends JButton {
     /**
      * Adds action listener.
      */
-    private void addMyActionListener(){
+    private void addMyActionListener() {
         this.addActionListener(e -> {
             JFileChooser fc = new JFileChooser("Open file");
             fc.setCurrentDirectory(new File(path));
             int returnVal = fc.showOpenDialog(this);
+
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         File file = fc.getSelectedFile();
                         String path = file.getAbsolutePath();
                         window.getList().clear();
 
-                        try (BufferedReader in = new BufferedReader(new FileReader(path))) {
+                        try (BufferedReader in = new BufferedReader
+                                (new FileReader(path))) {
                             StringBuilder sb = new StringBuilder();
                             String line = in.readLine();
 
                             while (line != null) {
                                 String[] temp = line.split(" ");
-                                insertItem(temp[1], Integer.parseInt(temp[0]), window.getList());
+                                insertItem(temp[1], Integer.parseInt
+                                        (temp[0]), window.getList());
                                 sb.append(line);
                                 sb.append(System.lineSeparator());
                                 line = in.readLine();
@@ -84,7 +88,6 @@ public class ButtonOpen extends JButton {
                     } else {
                         System.out.println("User cancelled operation");
                     }
-
         });
     }
 
@@ -180,7 +183,7 @@ public class ButtonOpen extends JButton {
      *
      * @return buttons name.
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

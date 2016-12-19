@@ -82,8 +82,8 @@ public class MyWindow extends JFrame {
         buttonContainer.add(dropbox);
 
         listContainer = new JPanel();
-        listContainer.setBackground(new Color(145,145,145));
-        listContainer.setLayout(new GridLayout(10,1));
+        listContainer.setBackground(new Color(145, 145, 145));
+        listContainer.setLayout(new GridLayout(10, 1));
     }
 
     /**
@@ -107,7 +107,7 @@ public class MyWindow extends JFrame {
      *
      * @return return MyLinkedList.
      */
-    public MyLinkedList getList(){
+    public MyLinkedList getList() {
         return shoppingList;
     }
 
@@ -116,22 +116,22 @@ public class MyWindow extends JFrame {
      *
      * @return textarea containing shopping list.
      */
-    public TextArea getItems(){
+    public TextArea getItems() {
         return items;
     }
 
     /**
-     * Returns path. Path knows from where
-     * it's being run.
+     * Returns path.
      *
-     * @return path.
+     * @return path which knows
+     * from where it's being run from.
      */
-    public String getPath(){
+    public String getPath() {
         return path;
     }
 
     /**
-     * Returns listContainer
+     * Returns listContainer.
      *
      * @return listContainer
      */

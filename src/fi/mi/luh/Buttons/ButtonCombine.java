@@ -37,12 +37,13 @@ public class ButtonCombine extends JButton {
 
     /**
      * Constructs button.
+     *
      * Combines two shopping lists.
      *
      * @param window main view.
      * @param name buttons name.
      */
-    public ButtonCombine(MyWindow window, String name){
+    public ButtonCombine(MyWindow window, String name) {
         super(name);
         this.window = window;
         this.name = name;
@@ -179,7 +180,7 @@ public class ButtonCombine extends JButton {
      *
      * @return buttons name.
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

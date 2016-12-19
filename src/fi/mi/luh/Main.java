@@ -12,7 +12,8 @@ public class Main {
     /**
      * Access token to get into DP.
      */
-    public static final String ACCESS_TOKEN = "saewg_CgqBIAAAAAAAAJT_lsI3wwCZO1Ogz-w87rUzeyh_5lyHanN5x0nYEA5dBK";
+    public static final String ACCESS_TOKEN =
+            "saewg_CgqBIAAAAAAAAJT_lsI3wwCZO1Ogz-w87rUzeyh_5lyHanN5x0nYEA5dBK";
 
     /**
      * Starts the app.

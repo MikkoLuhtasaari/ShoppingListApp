@@ -42,12 +42,13 @@ public class ButtonDropbox extends JButton {
 
     /**
      * Constructs the button.
+     *
      * Enables Dropbox saving and loading.
      *
      * @param window main view.
      * @param name buttons name.
      */
-    public ButtonDropbox(MyWindow window, String name){
+    public ButtonDropbox(MyWindow window, String name) {
         super(name);
         this.window = window;
         this.name = name;
@@ -59,7 +60,7 @@ public class ButtonDropbox extends JButton {
     /**
      * Adds action listener.
      */
-    private void addMyActionListener(){
+    private void addMyActionListener() {
         this.addActionListener(e ->{
             Object[] options = {"Save",
                     "Load"};
@@ -122,7 +123,8 @@ public class ButtonDropbox extends JButton {
 
             while (line != null) {
                 String[] temp = line.split(" ");
-                insertItem(temp[1], Integer.parseInt(temp[0]), window.getList());
+                insertItem(temp[1], Integer.parseInt(temp[0]),
+                        window.getList());
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
@@ -312,7 +314,7 @@ public class ButtonDropbox extends JButton {
      *
      * @return buttons name.
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 }
