@@ -59,7 +59,6 @@ public class ButtonSave extends JButton {
                     PrintWriter out = new PrintWriter(path + saveLocation + ".txt");
 
                     for (int i = 0; i < window.getList().size(); i++) {
-                        System.out.println("Tallennetaan");
                         ListItem temp = (ListItem) window.getList().get(i);
                         out.println(temp.description());
                     }

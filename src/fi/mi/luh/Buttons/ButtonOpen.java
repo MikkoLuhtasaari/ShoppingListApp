@@ -59,8 +59,6 @@ public class ButtonOpen extends JButton {
             JFileChooser fc = new JFileChooser("Open file");
             fc.setCurrentDirectory(new File(path));
             int returnVal = fc.showOpenDialog(this);
-            System.out.println(path);
-            //fc.showOpenDialog(this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         File file = fc.getSelectedFile();
                         String path = file.getAbsolutePath();
@@ -79,7 +77,6 @@ public class ButtonOpen extends JButton {
                             }
 
                             String everything = sb.toString();
-                            System.out.println(everything);
                             updateTextField();
                         } catch (IOException ex) {
                             ex.printStackTrace();

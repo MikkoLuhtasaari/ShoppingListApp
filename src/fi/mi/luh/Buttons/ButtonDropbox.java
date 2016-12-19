@@ -129,7 +129,6 @@ public class ButtonDropbox extends JButton {
             }
 
             String everything = sb.toString();
-            System.out.println(everything);
             updateTextField();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -153,7 +152,6 @@ public class ButtonDropbox extends JButton {
         String fileName = JOptionPane.showInputDialog("Please enter" +
                 " filename");
         String saveLocation = path + fileName+ ".txt";
-        System.out.println(saveLocation);
         boolean exists = false;
 
         // Create temporary text file which is then uploaded to DP.
@@ -161,7 +159,6 @@ public class ButtonDropbox extends JButton {
             PrintWriter out = new PrintWriter(saveLocation);
 
             for (int i = 0; i < window.getList().size(); i++) {
-                System.out.println("Tallennetaan");
                 ListItem temp = (ListItem) window.getList().get(i);
                 out.println(temp.description());
             }
@@ -184,7 +181,6 @@ public class ButtonDropbox extends JButton {
 
                 if (child.name.equalsIgnoreCase(fileName+".txt")) {
                     exists = true;
-                    System.out.println("found");
                 }
             }
         } catch (DbxException e) {
