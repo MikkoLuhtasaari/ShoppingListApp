@@ -16,6 +16,7 @@ import java.awt.*;
  * @since 2.0
  */
 public class ButtonAddItem extends JButton {
+
     /**
      * Stores Main view.
      */
@@ -28,12 +29,13 @@ public class ButtonAddItem extends JButton {
 
     /**
      * Constructs button and adds action listener.
+     *
      * Adds items to shopping list.
      *
      * @param window main view.
      * @param name name of the button.
      */
-    public ButtonAddItem(MyWindow window, String name){
+    public ButtonAddItem(MyWindow window, String name) {
         super(name);
         this.window = window;
         this.name = name;
@@ -43,6 +45,7 @@ public class ButtonAddItem extends JButton {
 
     /**
      * Adds corresponding action listener.
+     *
      * Adds items to shopping list.
      */
     private void addMyActionListener() {
@@ -93,7 +96,7 @@ public class ButtonAddItem extends JButton {
     }
 
     /**
-     * Updates buttons in listContainer
+     * Updates buttons in listContainer.
      *
      */
     private void updateTextField() {
@@ -101,9 +104,10 @@ public class ButtonAddItem extends JButton {
 
         for (int i = 0; i < window.getList().size(); i++) {
             ListItem tempItem = (ListItem)window.getList().get(i);
-            JButton temp = new JButton(tempItem.getName()+" "+tempItem.getAmount());
-            temp.setBackground(new Color(0,0,0));
-            temp.setForeground(new Color(255,255,255));
+            JButton temp = new JButton(tempItem.getName()+
+                    " "+tempItem.getAmount());
+            temp.setBackground(new Color(0, 0, 0));
+            temp.setForeground(new Color(255, 255, 255));
             temp.addActionListener(e -> {
                 Object[] options = {"Delete",
                         "Change amount"};
@@ -130,15 +134,16 @@ public class ButtonAddItem extends JButton {
                 }
 
                 if (n == 1) {
-                    int itemAmount = Integer.parseInt(JOptionPane.showInputDialog(
+                    int itemAmount = Integer.parseInt(JOptionPane.
+                            showInputDialog(
                             "Please enter the amount of item(s)"));
                     tempItem.setAmount(itemAmount);
                     temp.setText(tempItem.getName()+" "+tempItem.getAmount());
                 }
-
             });
             window.getListContainer().add(temp);
         }
+
         window.getListContainer().updateUI();
     }
 
@@ -147,7 +152,7 @@ public class ButtonAddItem extends JButton {
      *
      * @return return name.
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 }
