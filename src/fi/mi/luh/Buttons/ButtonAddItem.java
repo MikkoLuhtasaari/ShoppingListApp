@@ -105,9 +105,37 @@ public class ButtonAddItem extends JButton {
             temp.setBackground(new Color(0,0,0));
             temp.setForeground(new Color(255,255,255));
             temp.addActionListener(e -> {
-                this.window.getList().remove(tempItem);
-                this.window.getListContainer().remove(temp);
-                window.getListContainer().updateUI();
+                Object[] options = {"Delete",
+                        "Change amount"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "Please select operation",
+                        "Files from Dropbox",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+
+                if (n == -1) {
+                    JOptionPane.showMessageDialog(this,
+                            "Clicked cancel.",
+                            "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
+                if (n == 0) {
+                    this.window.getList().remove(tempItem);
+                    this.window.getListContainer().remove(temp);
+                    window.getListContainer().updateUI();
+                }
+
+                if (n == 1) {
+                    int itemAmount = Integer.parseInt(JOptionPane.showInputDialog(
+                            "Please enter the amount of item(s)"));
+                    tempItem.setAmount(itemAmount);
+                    temp.setText(tempItem.getName()+" "+tempItem.getAmount());
+                }
+
             });
             window.getListContainer().add(temp);
         }
