@@ -33,12 +33,13 @@ public class ButtonSave extends JButton {
 
     /**
      * Constructs button.
+     *
      * Saves shoppinglist to a text file.
      *
      * @param window main view.
      * @param name buttons name.
      */
-    public ButtonSave(MyWindow window, String name){
+    public ButtonSave(MyWindow window, String name) {
         super(name);
         this.window = window;
         this.name = name;
@@ -50,16 +51,17 @@ public class ButtonSave extends JButton {
     /**
      * Adds action listener.
      */
-    private void addMyActionListener(){
+    private void addMyActionListener() {
         this.addActionListener(e -> {
             String saveLocation = JOptionPane.showInputDialog("Please enter" +
                     " filename");
-            if(!saveLocation.equalsIgnoreCase("")) {
+
+            if (!saveLocation.equalsIgnoreCase("")) {
                 try {
-                    PrintWriter out = new PrintWriter(path + saveLocation + ".txt");
+                    PrintWriter out = new PrintWriter
+                            (path + saveLocation + ".txt");
 
                     for (int i = 0; i < window.getList().size(); i++) {
-                        System.out.println("Tallennetaan");
                         ListItem temp = (ListItem) window.getList().get(i);
                         out.println(temp.description());
                     }
@@ -72,7 +74,6 @@ public class ButtonSave extends JButton {
                 System.out.println("User cancelled operation");
             }
         });
-
     }
 
     /**
@@ -80,7 +81,7 @@ public class ButtonSave extends JButton {
      *
      * @return buttons name.
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

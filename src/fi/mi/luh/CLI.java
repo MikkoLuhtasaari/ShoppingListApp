@@ -40,6 +40,7 @@ public class CLI {
         System.out.println("Tampere University of Applied Sciences");
         System.out.println("Give shopping list (example: 1" +
                 " milk;2 tomato;3 carrot;)");
+
         while (!input.equalsIgnoreCase("exit")) {
             input = reader.nextLine();
 
@@ -63,7 +64,7 @@ public class CLI {
 
         for (String temporary : temp) {
             String[] temp2 = temporary.split(" ");
-            insertItem(temp2[1],Integer.parseInt(temp2[0]));
+            insertItem(temp2[1], Integer.parseInt(temp2[0]));
         }
     }
 
@@ -98,7 +99,6 @@ public class CLI {
                     shoppingList.add(new ListItem(name, amount));
                 }
             }
-
         }
     }
 

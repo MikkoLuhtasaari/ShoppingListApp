@@ -7,11 +7,11 @@ import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import fi.mi.luh.ListItem;
-import fi.mi.luh.Main;
 import fi.mi.luh.MyLinkedList;
 import fi.mi.luh.MyWindow;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 
 import static fi.mi.luh.Main.ACCESS_TOKEN;
@@ -42,12 +42,13 @@ public class ButtonDropbox extends JButton {
 
     /**
      * Constructs the button.
+     *
      * Enables Dropbox saving and loading.
      *
      * @param window main view.
      * @param name buttons name.
      */
-    public ButtonDropbox(MyWindow window, String name){
+    public ButtonDropbox(MyWindow window, String name) {
         super(name);
         this.window = window;
         this.name = name;
@@ -59,7 +60,7 @@ public class ButtonDropbox extends JButton {
     /**
      * Adds action listener.
      */
-    private void addMyActionListener(){
+    private void addMyActionListener() {
         this.addActionListener(e ->{
             Object[] options = {"Save",
                     "Load"};
@@ -122,14 +123,14 @@ public class ButtonDropbox extends JButton {
 
             while (line != null) {
                 String[] temp = line.split(" ");
-                insertItem(temp[1], Integer.parseInt(temp[0]), window.getList());
+                insertItem(temp[1], Integer.parseInt(temp[0]),
+                        window.getList());
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = in.readLine();
             }
 
             String everything = sb.toString();
-            System.out.println(everything);
             updateTextField();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -153,7 +154,6 @@ public class ButtonDropbox extends JButton {
         String fileName = JOptionPane.showInputDialog("Please enter" +
                 " filename");
         String saveLocation = path + fileName+ ".txt";
-        System.out.println(saveLocation);
         boolean exists = false;
 
         // Create temporary text file which is then uploaded to DP.
@@ -161,7 +161,6 @@ public class ButtonDropbox extends JButton {
             PrintWriter out = new PrintWriter(saveLocation);
 
             for (int i = 0; i < window.getList().size(); i++) {
-                System.out.println("Tallennetaan");
                 ListItem temp = (ListItem) window.getList().get(i);
                 out.println(temp.description());
             }
@@ -184,7 +183,6 @@ public class ButtonDropbox extends JButton {
 
                 if (child.name.equalsIgnoreCase(fileName+".txt")) {
                     exists = true;
-                    System.out.println("found");
                 }
             }
         } catch (DbxException e) {
@@ -223,20 +221,55 @@ public class ButtonDropbox extends JButton {
     }
 
     /**
-     * Updates text to be shown in text area.
+     * Updates buttons in listContainer.
      *
      */
-    public void updateTextField() {
-        String temp = Main.startForShoppingList;
+    private void updateTextField() {
+        window.getListContainer().removeAll();
 
-        if (!window.getList().isEmpty()) {
+        for (int i = 0; i < window.getList().size(); i++) {
+            ListItem tempItem = (ListItem)window.getList().get(i);
+            JButton temp = new JButton(tempItem.getName()+
+                    " "+tempItem.getAmount());
+            temp.setBackground(new Color(0, 0, 0));
+            temp.setForeground(new Color(255, 255, 255));
+            temp.addActionListener(e -> {
+                Object[] options = {"Delete",
+                        "Change amount"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "Please select operation",
+                        "Files from Dropbox",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
 
-            for (int i = 0; i < window.getList().size(); i++) {
-                temp += window.getList().get(i).toString()+"\n";
-            }
+                if (n == -1) {
+                    JOptionPane.showMessageDialog(this,
+                            "Clicked cancel.",
+                            "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
+                if (n == 0) {
+                    this.window.getList().remove(tempItem);
+                    this.window.getListContainer().remove(temp);
+                    window.getListContainer().updateUI();
+                }
+
+                if (n == 1) {
+                    int itemAmount = Integer.parseInt(JOptionPane.
+                            showInputDialog(
+                                    "Please enter the amount of item(s)"));
+                    tempItem.setAmount(itemAmount);
+                    temp.setText(tempItem.getName()+" "+tempItem.getAmount());
+                }
+            });
+            window.getListContainer().add(temp);
         }
 
-        window.getItems().setText(temp);
+        window.getListContainer().updateUI();
     }
 
     /**
@@ -281,7 +314,7 @@ public class ButtonDropbox extends JButton {
      *
      * @return buttons name.
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

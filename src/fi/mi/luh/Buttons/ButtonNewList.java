@@ -26,12 +26,13 @@ public class ButtonNewList extends JButton {
 
     /**
      * Constructs button.
+     *
      * Clears existing shoppinglist.
      *
      * @param window main view.
      * @param name buttons name.
      */
-    public ButtonNewList(MyWindow window, String name){
+    public ButtonNewList(MyWindow window, String name) {
         super(name);
         this.window = window;
         this.name = name;
@@ -40,12 +41,13 @@ public class ButtonNewList extends JButton {
     }
 
     /**
-     * Add action listener.
+     * Adds action listener.
      */
-    private void addMyActionListener(){
+    private void addMyActionListener() {
         this.addActionListener(e -> {
             window.getList().clear();
-            window.getItems().setText(Main.startForShoppingList);
+            window.getListContainer().removeAll();
+            window.getListContainer().updateUI();
         });
     }
 
@@ -54,7 +56,7 @@ public class ButtonNewList extends JButton {
      *
      * @return buttons name.
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

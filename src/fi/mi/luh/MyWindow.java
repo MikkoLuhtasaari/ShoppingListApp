@@ -5,10 +5,6 @@ import fi.mi.luh.Buttons.*;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 
 /**
  * Creates window to be shown.
@@ -86,21 +82,8 @@ public class MyWindow extends JFrame {
         buttonContainer.add(dropbox);
 
         listContainer = new JPanel();
-        items = new TextArea(Main.startForShoppingList);
-        items.setEditable(false);
-        items.addMouseListener(new MouseAdapter() {
-            /**
-             * {@inheritDoc}
-             *
-             * @param e
-             */
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                System.out.println();
-            }
-        });
-        listContainer.add(items);
+        listContainer.setBackground(new Color(145, 145, 145));
+        listContainer.setLayout(new GridLayout(10, 1));
     }
 
     /**
@@ -124,7 +107,7 @@ public class MyWindow extends JFrame {
      *
      * @return return MyLinkedList.
      */
-    public MyLinkedList getList(){
+    public MyLinkedList getList() {
         return shoppingList;
     }
 
@@ -133,17 +116,26 @@ public class MyWindow extends JFrame {
      *
      * @return textarea containing shopping list.
      */
-    public TextArea getItems(){
+    public TextArea getItems() {
         return items;
     }
 
     /**
-     * Returns path. Path knows from where
-     * it's being run.
+     * Returns path.
      *
-     * @return path.
+     * @return path which knows
+     * from where it's being run from.
      */
-    public String getPath(){
+    public String getPath() {
         return path;
+    }
+
+    /**
+     * Returns listContainer.
+     *
+     * @return listContainer
+     */
+    public JPanel getListContainer() {
+        return listContainer;
     }
 }

@@ -8,13 +8,12 @@ package fi.mi.luh;
  * @since 1.0, 14 Nov 2016
  */
 public class Main {
-    public static final String ACCESS_TOKEN = "saewg_CgqBIAAAAAAAAJT_lsI3wwCZO1Ogz-w87rUzeyh_5lyHanN5x0nYEA5dBK";
 
     /**
-     * Sets starting text to be shown.
+     * Access token to get into DP.
      */
-    public static final String startForShoppingList = "Your shopping list " +
-            "now contains: \n";
+    public static final String ACCESS_TOKEN =
+            "saewg_CgqBIAAAAAAAAJT_lsI3wwCZO1Ogz-w87rUzeyh_5lyHanN5x0nYEA5dBK";
 
     /**
      * Starts the app.
